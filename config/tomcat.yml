@@ -17,7 +17,7 @@
 ---
 tomcat:
   version: 8.0.+
-  repository_root: ! '{default.repository.root}/tomcat'
+  repository_root: ! 'https://tomee-repo.cfapps.pez.pivotal.io/tomee'
   context_path:
 lifecycle_support:
   version: 2.+
