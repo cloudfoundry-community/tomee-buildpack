@@ -16,7 +16,8 @@
 # Configuration for the Tomcat container
 ---
 tomcat:
-  version: 8.0.+
+#  version: 8.0.+
+  version: 1.7.+
   repository_root: ! 'https://tomee-repo.cfapps.pez.pivotal.io/tomee'
   context_path:
 lifecycle_support:
