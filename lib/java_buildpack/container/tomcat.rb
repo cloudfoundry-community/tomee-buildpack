@@ -41,6 +41,13 @@ module JavaBuildpack
           @droplet.environment_variables.as_env_vars,
           @droplet.java_home.as_env_var,
           @droplet.java_opts.as_env_var,
+          "-Djava.util.logging.config.file=$PWD/.java-buildpack/tomcat/conf/logging.properties",
+          "-Djava.util.logging.manager=org.apache.juli.ClassLoaderLogManager",
+          "-javaagent:$PWD/.java-buildpack/tomcat/lib/openejb-javaagent.jar", 
+          "-Djava.endorsed.dirs=$PWD/.java-buildpack/tomcat/endorsed",
+          "-classpath $PWD/.java-buildpack/tomcat/bin/bootstrap.jar:$PWD/.java-buildpack/tomcat/bin/tomcat-juli.jar", 
+          "-Dcatalina.base=$PWD/.java-buildpack",
+          "-Dcatalina.home=$PWD/.java-buildpack",
           "$PWD/#{(@droplet.sandbox + 'bin/catalina.sh').relative_path_from(@droplet.root)}",
           'run'
         ].flatten.compact.join(' ')

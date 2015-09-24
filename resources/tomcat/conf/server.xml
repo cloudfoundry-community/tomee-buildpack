@@ -19,7 +19,8 @@
 <Server port='-1'>
 
     <Service name='Catalina'>
-        <Connector port='${http.port}' bindOnInit="false" connectionTimeout="20000"/>
+        <Connector port='${http.port}' bindOnInit="false" connectionTimeout="20000" server="Apache TomEE"/>
+        <!--Connector port="8080" protocol="HTTP/1.1" connectionTimeout="20000" redirectPort="8443" xpoweredBy="false" server="Apache TomEE" /-->
 
         <Engine defaultHost='localhost' name='Catalina'>
             <Valve className="org.apache.catalina.valves.RemoteIpValve" protocolHeader="x-forwarded-proto"/>
@@ -28,6 +29,23 @@
                    enabled="${access.logging.enabled}"/>
             <Host name='localhost'>
                 <Listener className="com.gopivotal.cloudfoundry.tomcat.lifecycle.ApplicationStartupFailureDetectingLifecycleListener"/>
+
+                <!-- Listener className="org.apache.myfaces.webapp.StartupServletContextListener"/-->
+
+                <Listener className="org.apache.tomee.catalina.ServerListener"/>
+                <Listener className="org.apache.catalina.startup.VersionLoggerListener"/>
+                <!-- Security listener. Documentation at /docs/config/listeners.html
+                <Listener className="org.apache.catalina.security.SecurityListener" />
+                -->
+                <!--APR library loader. Documentation at /docs/apr.html -->
+                <Listener className="org.apache.catalina.core.AprLifecycleListener" SSLEngine="on"/>
+                <!--Initialize Jasper prior to webapps are loaded. Documentation at /docs/jasper-howto.html -->
+                <Listener className="org.apache.catalina.core.JasperListener" />
+                <!-- Prevent memory leaks due to use of particular java/javax APIs-->
+                <Listener className="org.apache.catalina.core.JreMemoryLeakPreventionListener" />
+                <Listener className="org.apache.catalina.mbeans.GlobalResourcesLifecycleListener" />
+                <Listener className="org.apache.catalina.core.ThreadLocalLeakPreventionListener" />
+
             </Host>
         </Engine>
     </Service>
