@@ -17,13 +17,13 @@
 require 'spec_helper'
 require 'component_helper'
 require 'fileutils'
-require 'java_buildpack/container/tomcat'
 require 'java_buildpack/container/tomcat/tomcat_insight_support'
 require 'java_buildpack/container/tomcat/tomcat_instance'
 require 'java_buildpack/container/tomcat/tomcat_lifecycle_support'
 require 'java_buildpack/container/tomcat/tomcat_logging_support'
 require 'java_buildpack/container/tomcat/tomcat_access_logging_support'
 require 'java_buildpack/container/tomcat/tomcat_redis_store'
+require 'java_buildpack/container/tomee'
 
 describe JavaBuildpack::Container::Tomee do
   include_context 'component_helper'
