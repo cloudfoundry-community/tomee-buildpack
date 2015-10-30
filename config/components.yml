@@ -23,7 +23,8 @@ containers:
   - "JavaBuildpack::Container::Ratpack"
   - "JavaBuildpack::Container::SpringBoot"
   - "JavaBuildpack::Container::SpringBootCLI"
-  - "JavaBuildpack::Container::Tomcat"
+#  - "JavaBuildpack::Container::Tomcat"
+  - "JavaBuildpack::Container::Tomee"
 
 # In order to use Oracle JREs instead of OpenJDK, you must comment out the OpenJDK line and uncomment the Oracle line.
 # Please see the documentation for more detail.
