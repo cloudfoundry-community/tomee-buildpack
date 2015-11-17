@@ -67,7 +67,7 @@ describe JavaBuildpack::Container::Tomee do
   end
 
   it 'creates submodules' do
-    expect(JavaBuildpack::Container::TomcatInstance)
+    expect(JavaBuildpack::Container::TomeeInstance)
       .to receive(:new).with(sub_configuration_context(tomee_configuration))
     expect(JavaBuildpack::Container::TomcatLifecycleSupport)
       .to receive(:new).with(sub_configuration_context(lifecycle_support_configuration))
