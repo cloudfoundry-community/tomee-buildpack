@@ -7,7 +7,7 @@ The TomEE Container provides Java EE 6 Web Profile.  Applications are run as the
   </tr>
   <tr>
     <td><strong>Tags</strong></td>
-    <td><tt>tomee-instance=&lang;version&rang;</tt>, <tt>tomcat-lifecycle-support=&lang;version&rang;</tt>, <tt>tomcat-logging-support=&lang;version&rang;</tt> <tt>tomcat-redis-store=&lang;version&rang;</tt> <i>(optional)</i></td>
+    <td><tt>tomee-instance=&lang;version&rang;</tt>, <tt>tomcat-lifecycle-support=&lang;version&rang;</tt>, <tt>tomcat-logging-support=&lang;version&rang;</tt>, <tt>tomcat-redis-store=&lang;version&rang;</tt> <i>(optional)</i>, <tt>tomee-resource-configuration=&lang;version&rang;</tt> <i>(optional)</i></td>
   </tr>
 </table>
 Tags are printed to standard output by the buildpack detect script
@@ -45,6 +45,9 @@ The container can be configured by modifying the [`config/tomee.yml`][] file in 
 | `redis_store.repository_root` | The URL of the Redis Store repository index ([details][repositories]).
 | `redis_store.timeout` | The Redis connection timeout (in milliseconds).
 | `redis_store.version` | The version of Redis Store to use. Candidate versions can be found in [this listing](http://download.pivotal.io.s3.amazonaws.com/redis-store/index.yml).
+| `resource-configuration.repository_root` | The URL of the TomEE Resources Auto Configuration repository index ([details][repositories]).
+| `resource-configuration.version` | The version of TomEE Resources Auto Configuration to use. Candidate versions can be found in [this listing](http://download.pivotal.io.s3.amazonaws.com/tomee-resource-configuration/index.yml).
+| `resource-configuration.enabled` | Set to `false` to turn off the resources auto configuration. Default is `true`.
 | `tomee.context_path` | The context path to expose the application at.
 | `tomee.repository_root` | The URL of the TomEE repository index ([details][repositories]).
 | `tomee.version` | The version of TomEE to use. Candidate versions can be found in [this listing](http://download.pivotal.io.s3.amazonaws.com/tomee/index.yml).
@@ -88,6 +91,22 @@ env:
 ## Supporting Functionality
 Additional supporting functionality can be found in the [`java-buildpack-support`][] Git repository.
 
+## TomEE Resources Auto Configuration
+TomEE Resources Auto Configuration functionality causes an application to be automatically reconfigured to work with configured cloud services.
+If a `/WEB-INF/resources.xml` file does not exist, it will be created. If it exists it will be modified.
+Preconfigured `Resource` definition will be added to this file for every relational data service.
+
+```
+<Resource id='jdbc/...' type='DataSource' properties-provider='org.cloudfoundry.reconfiguration.tomee.DelegatingPropertiesProvider' />
+```
+
+This configuration consists of:
+* id - `jdbc/` prefix combined with the cloud service name
+* type - `DataSource`
+* properties provider - `org.cloudfoundry.reconfiguration.tomee.DelegatingPropertiesProvider` that will supply the configuration properties for the corresponding cloud service.
+
+This functionality can be found in the [`tomee-buildpack-resource-configuration`][] Git repository.
+
 [Configuration and Extension]: ../README.md#configuration-and-extension
 [`config/tomee.yml`]: ../config/tomee.yml
 [Session State Caching (SSC) GemFire service]: https://network.pivotal.io/products/p-ssc-gemfire
@@ -97,3 +116,4 @@ Additional supporting functionality can be found in the [`java-buildpack-support
 [`SPRING_PROFILES_ACTIVE`]: http://docs.spring.io/spring/docs/4.0.0.RELEASE/javadoc-api/org/springframework/core/env/AbstractEnvironment.html#ACTIVE_PROFILES_PROPERTY_NAME
 [Tomcat wiki]: http://wiki.apache.org/tomcat/HowTo/FasterStartUp
 [version syntax]: extending-repositories.md#version-syntax-and-ordering
+[`tomee-buildpack-resource-configuration`]: https://github.com/cloudfoundry-community/tomee-buildpack-resource-configuration
