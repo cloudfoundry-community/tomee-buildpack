@@ -18,6 +18,7 @@ require 'java_buildpack/component/modular_component'
 require 'java_buildpack/container'
 require 'java_buildpack/container/tomcat/tomcat_insight_support'
 require 'java_buildpack/container/tomee/tomee_instance'
+require 'java_buildpack/container/tomee/tomee_resource_configuration'
 require 'java_buildpack/container/tomcat/tomcat_lifecycle_support'
 require 'java_buildpack/container/tomcat/tomcat_logging_support'
 require 'java_buildpack/container/tomcat/tomcat_access_logging_support'
@@ -51,6 +52,7 @@ module JavaBuildpack
       def sub_components(context)
         [
           TomeeInstance.new(sub_configuration_context(context, 'tomee')),
+          TomeeResourceConfiguration.new(sub_configuration_context(context, 'resource_configuration')),
           TomcatLifecycleSupport.new(sub_configuration_context(context, 'lifecycle_support')),
           TomcatLoggingSupport.new(sub_configuration_context(context, 'logging_support')),
           TomcatAccessLoggingSupport.new(sub_configuration_context(context, 'access_logging_support')),

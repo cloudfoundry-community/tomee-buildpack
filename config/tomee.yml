@@ -29,6 +29,10 @@ access_logging_support:
   version: 2.+
   repository_root: ! '{default.repository.root}/tomcat-access-logging-support'
   access_logging: disabled
+resource_configuration:
+  version: 1.+
+  repository_root: ! '{default.repository.root}/tomee-resource-configuration'
+  enabled: true
 redis_store:
   version: 1.+
   repository_root: ! '{default.repository.root}/redis-store'
