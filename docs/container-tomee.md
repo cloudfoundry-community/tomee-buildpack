@@ -7,7 +7,7 @@ The TomEE Container provides Java EE 6 Web Profile.  Applications are run as the
   </tr>
   <tr>
     <td><strong>Tags</strong></td>
-    <td><tt>tomee-instance=&lang;version&rang;</tt>, <tt>tomcat-lifecycle-support=&lang;version&rang;</tt>, <tt>tomcat-logging-support=&lang;version&rang;</tt>, <tt>tomcat-redis-store=&lang;version&rang;</tt> <i>(optional)</i>, <tt>tomee-resource-configuration=&lang;version&rang;</tt> <i>(optional)</i></td>
+    <td><tt>tomee-instance=&lang;version&rang;</tt>, <tt>tomcat-lifecycle-support=&lang;version&rang;</tt>, <tt>tomcat-logging-support=&lang;version&rang;</tt>, <tt>tomcat-redis-store=&lang;version&rang;</tt> <i>(optional)</i>, <tt>tomcat-external_configuration=&lang;version&rang;</tt> <i>(optional)</i>, <tt>tomee-resource-configuration=&lang;version&rang;</tt> <i>(optional)</i></td>
   </tr>
 </table>
 Tags are printed to standard output by the buildpack detect script
@@ -51,6 +51,9 @@ The container can be configured by modifying the [`config/tomee.yml`][] file in 
 | `tomee.context_path` | The context path to expose the application at.
 | `tomee.repository_root` | The URL of the TomEE repository index ([details][repositories]).
 | `tomee.version` | The version of TomEE to use. Candidate versions can be found in [this listing](http://download.pivotal.io.s3.amazonaws.com/tomee/index.yml).
+| `tomee.external_configuration_enabled` | Set to `true` to be able to supply an external TomEE configuration. Default is `false`.
+| `external_configuration.version` | The version of the External TomEE Configuration to use. Candidate versions can be found in the the repository that you have created to house the External TomEE Configuration. Note: It is required the external configuration to allow symlinks.
+| `external_configuration.repository_root` | The URL of the External TomEE Configuration repository index ([details][repositories]).
 
 ### Common configurations
 The version of TomEE can be configured by setting an environment variable.
@@ -67,7 +70,33 @@ $ cf set-env my-application JBP_CONFIG_TOMEE '{tomee: { context_path: /first-seg
 
 
 ### Additional Resources
-The container can also be configured by overlaying a set of resources on the default distribution.  To do this, add files to the `resources/tomee` directory in the buildpack fork.  For example, to override the default `logging.properties` add your custom file to `resources/tomee/conf/logging.properties`.
+The container can also be configured by overlaying a set of resources on the default distribution.  To do this follow one of the options below.
+
+#### Buildpack Fork
+Add files to the `resources/tomee` directory in the buildpack fork.  For example, to override the default `logging.properties` add your custom file to `resources/tomee/conf/logging.properties`.
+
+#### External TomEE Configuration
+Supply a repository with an external TomEE configuration.
+
+Example in a manifest.yml
+```
+env:
+  JBP_CONFIG_TOMEE: "{ tomee: { external_configuration_enabled: true }, external_configuration: { repository_root: \"http://repository...\" } }"
+```
+
+The artifacts that the repository provides must be in TAR format and must follow the TomEE archive structure:
+
+```
+tomee
+|__conf
+   |__context.xml
+   |__server.xml
+   |__web.xml
+   |...
+```
+
+Notes:
+* It is required the external configuration to allow symlinks. For more information check [Tomcat 7 configuration].
 
 ## Session Replication
 By default, the TomEE instance is configured to store all Sessions and their data in memory.  Under certain circumstances it my be appropriate to persist the Sessions and their data to a repository.  When this is the case (small amounts of data that should survive the failure of any individual instance), the buildpack can automatically configure TomEE to do so by binding an appropriate service.
@@ -116,4 +145,5 @@ This functionality can be found in the [`tomee-buildpack-resource-configuration`
 [`SPRING_PROFILES_ACTIVE`]: http://docs.spring.io/spring/docs/4.0.0.RELEASE/javadoc-api/org/springframework/core/env/AbstractEnvironment.html#ACTIVE_PROFILES_PROPERTY_NAME
 [Tomcat wiki]: http://wiki.apache.org/tomcat/HowTo/FasterStartUp
 [version syntax]: extending-repositories.md#version-syntax-and-ordering
+[Tomcat 7 configuration]: http://tomcat.apache.org/tomcat-7.0-doc/config/context.html#Standard_Implementation
 [`tomee-buildpack-resource-configuration`]: https://github.com/cloudfoundry-community/tomee-buildpack-resource-configuration

@@ -19,6 +19,7 @@ require 'java_buildpack/container'
 require 'java_buildpack/container/tomcat/tomcat_insight_support'
 require 'java_buildpack/container/tomee/tomee_instance'
 require 'java_buildpack/container/tomee/tomee_resource_configuration'
+require 'java_buildpack/container/tomcat/tomcat_external_configuration'
 require 'java_buildpack/container/tomcat/tomcat_lifecycle_support'
 require 'java_buildpack/container/tomcat/tomcat_logging_support'
 require 'java_buildpack/container/tomcat/tomcat_access_logging_support'
@@ -50,7 +51,7 @@ module JavaBuildpack
 
       # (see JavaBuildpack::Component::ModularComponent#sub_components)
       def sub_components(context)
-        [
+        components = [
           TomeeInstance.new(sub_configuration_context(context, 'tomee')),
           TomeeResourceConfiguration.new(sub_configuration_context(context, 'resource_configuration')),
           TomcatLifecycleSupport.new(sub_configuration_context(context, 'lifecycle_support')),
@@ -60,6 +61,12 @@ module JavaBuildpack
           TomcatGemfireStore.new(sub_configuration_context(context, 'gemfire_store')),
           TomcatInsightSupport.new(context)
         ]
+
+        tomee_configuration = @configuration['tomee']
+        components << TomcatExternalConfiguration.new(sub_configuration_context(context, 'external_configuration')) if
+          tomee_configuration['external_configuration_enabled']
+
+        components
       end
 
       # (see JavaBuildpack::Component::ModularComponent#supports?)
