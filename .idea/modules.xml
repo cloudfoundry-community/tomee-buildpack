@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/java-buildpack.iml" filepath="$PROJECT_DIR$/java-buildpack.iml" />
+      <module fileurl="file://$PROJECT_DIR$/tomee-buildpack.iml" filepath="$PROJECT_DIR$/tomee-buildpack.iml" />
     </modules>
   </component>
 </project>
