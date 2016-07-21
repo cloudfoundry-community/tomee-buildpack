@@ -23,6 +23,18 @@ module JavaBuildpack
 
     # Encapsulates the detect, compile, and release functionality for the TomEE instance.
     class TomeeInstance < TomcatInstance
+
+      protected
+
+      TOMEE_7 = JavaBuildpack::Util::TokenizedVersion.new('7.0.0').freeze
+
+      private_constant :TOMEE_7
+
+      # Checks whether TomEE instance is Tomcat 7 compatible
+      def tomcat_7_compatible
+        @version < TOMEE_7
+      end
+
     end
 
   end
