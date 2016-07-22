@@ -37,6 +37,20 @@ describe JavaBuildpack::Container::TomeeInstance do
       .to match(%r{<Listener className='org.apache.catalina.core.JasperListener'/>})
   end
 
+  context do
+    let(:version) { '7.0.1' }
+
+    it 'configures for TomEE 7.0.x',
+       app_fixture:   'container_tomcat',
+       cache_fixture: 'stub-tomcat.tar.gz' do
+
+      component.compile
+      expect((sandbox + 'conf/context.xml').read).to match(%r{<Context>[\s]*<Resources allowLinking='true'/>})
+      expect((sandbox + 'conf/server.xml').read)
+        .not_to match(%r{<Listener className='org.apache.catalina.core.JasperListener'/>})
+    end
+  end
+
   it 'extracts TomEE from a GZipped TAR',
      app_fixture:   'container_tomcat',
      cache_fixture: 'stub-tomcat.tar.gz' do
