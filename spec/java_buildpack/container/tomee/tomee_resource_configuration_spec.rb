@@ -95,9 +95,8 @@ describe JavaBuildpack::Container::TomeeResourceConfiguration do
 
       component.compile
 
-      expect(resources_xml.read).to match(
-        %r{<Resource id='jdbc/test' type='DataSource'\
- properties-provider='org.cloudfoundry.reconfiguration.tomee.DelegatingPropertiesProvider'/>})
+      expect(resources_xml.read).to match(%r{<Resource id='jdbc/test' type='DataSource' \
+properties-provider='org.cloudfoundry.reconfiguration.tomee.DelegatingPropertiesProvider'/>})
     end
 
     it 'adds Resource element to non-empty resources.xml',
@@ -110,11 +109,10 @@ describe JavaBuildpack::Container::TomeeResourceConfiguration do
 
       component.compile
 
-      expect(resources_xml.read).to match(
-        %r{<Resource id='My Test Resource' type='my.test.Resource' provider='my.test#Provider'/>})
-      expect(resources_xml.read).to match(
-        %r{<Resource id='jdbc/test' type='DataSource'\
- properties-provider='org.cloudfoundry.reconfiguration.tomee.DelegatingPropertiesProvider'/>})
+      expect(resources_xml.read).to match(%r{<Resource id='My Test Resource' type='my.test.Resource' \
+provider='my.test#Provider'/>})
+      expect(resources_xml.read).to match(%r{<Resource id='jdbc/test' type='DataSource' \
+properties-provider='org.cloudfoundry.reconfiguration.tomee.DelegatingPropertiesProvider'/>})
     end
   end
 
