@@ -68,6 +68,12 @@ describe JavaBuildpack::Container::Tomee do
     expect(component.supports?).not_to be
   end
 
+  it 'detects META-INF/application.xml',
+     app_fixture: 'container_ear_structure' do
+
+    expect(component.supports?).to be
+  end
+
   it 'creates submodules' do
     allow(JavaBuildpack::Container::TomeeInstance)
       .to receive(:new).with(sub_configuration_context(tomee_configuration))

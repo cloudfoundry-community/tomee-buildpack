@@ -1,0 +1,3 @@
+<resources>
+  <Resource id="My Test Resource" type="my.test.Resource" provider="my.test#Provider"/>
+</resources>

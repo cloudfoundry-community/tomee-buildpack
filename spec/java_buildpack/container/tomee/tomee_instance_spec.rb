@@ -153,4 +153,38 @@ describe JavaBuildpack::Container::TomeeInstance do
     expect(test_jar2.readlink).to eq((additional_libs_directory + 'test-jar-2.jar').relative_path_from(web_inf_lib))
   end
 
+  it 'links additional libraries to tomee/lib for an ear file',
+     app_fixture:   'container_ear_structure',
+     cache_fixture: 'stub-tomcat.tar.gz' do
+
+    component.compile
+
+    tomee_lib = sandbox + 'lib'
+
+    test_jar1 = sandbox + 'lib/test-jar-1.jar'
+    test_jar2 = sandbox + 'lib/test-jar-2.jar'
+    expect(test_jar1).to exist
+    expect(test_jar1).to be_symlink
+    expect(test_jar1.readlink).to eq((additional_libs_directory + 'test-jar-1.jar').relative_path_from(tomee_lib))
+
+    expect(test_jar2).to exist
+    expect(test_jar2).to be_symlink
+    expect(test_jar2.readlink).to eq((additional_libs_directory + 'test-jar-2.jar').relative_path_from(tomee_lib))
+  end
+
+  it 'links driver libraries to tomee/lib for an ear file',
+     app_fixture:   'container_ear_structure_with_resource_drivers',
+     cache_fixture: 'stub-tomcat.tar.gz' do
+
+    component.compile
+
+    tomee_lib = sandbox + 'lib'
+
+    test_jar1 = sandbox + 'lib/somedriver.txt'
+    expect(test_jar1).to exist
+    expect(test_jar1).to be_symlink
+    expect(test_jar1.readlink).to eq((app_dir + 'drivers/somedriver.txt').relative_path_from(tomee_lib))
+
+  end
+
 end
