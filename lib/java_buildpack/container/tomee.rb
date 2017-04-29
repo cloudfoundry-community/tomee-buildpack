@@ -68,10 +68,14 @@ module JavaBuildpack
 
       # (see JavaBuildpack::Component::ModularComponent#supports?)
       def supports?
-        web_inf? && !JavaBuildpack::Util::JavaMainUtils.main_class(@application)
+        (web_inf? && !JavaBuildpack::Util::JavaMainUtils.main_class(@application)) || is_ear?
       end
 
       private
+
+      def is_ear?
+        (@application.root + 'META-INF/application.xml').exist?
+      end
 
       def web_inf?
         (@application.root + 'WEB-INF').exist?
