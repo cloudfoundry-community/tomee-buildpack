@@ -23,6 +23,16 @@ module JavaBuildpack
     # Encapsulates the detect, compile, and release functionality for the TomEE instance.
     class TomeeInstance < TomcatInstance
 
+      # (see JavaBuildpack::Component::BaseComponent#compile)
+      def compile
+        download(@version, @uri) { |file| expand file }
+        link_to(@application.root.children, root)
+        unless ear?
+          @droplet.additional_libraries << tomcat_datasource_jar if tomcat_datasource_jar.exist?
+        end
+        @droplet.additional_libraries.link_to web_inf_lib
+      end
+
       protected
 
       TOMEE_7 = JavaBuildpack::Util::TokenizedVersion.new('7.0.0').freeze
@@ -32,6 +42,21 @@ module JavaBuildpack
       # Checks whether TomEE instance is Tomcat 7 compatible
       def tomcat_7_compatible
         @version < TOMEE_7
+      end
+
+      private
+
+      def web_inf_lib
+        if ear?
+          # copy additional libraries to tomee lib folder
+          tomcat_lib
+        else
+          @droplet.root + 'WEB-INF/lib'
+        end
+      end
+
+      def ear?
+        (@application.root + 'META-INF/application.xml').exist?
       end
 
     end
