@@ -3,7 +3,8 @@ The TomEE Container provides Java EE 6 Web Profile.  Applications are run as the
 
 <table>
   <tr>
-    <td><strong>Detection Criterion</strong></td><td>Existence of a <tt>WEB-INF/</tt> folder in the application directory and <a href="container-java_main.md">Java Main</a> not detected</td>
+    <td><strong>Detection Criterion</strong></td><td>Existence of a <tt>WEB-INF/</tt> folder in the application directory and <a href="container-java_main.md">Java Main</a> not detected. If a META-INF/application.xml file is present then the application is considered an ear file and a deployment attempted. Note that TomEE supports only the JEE 7 [Web Profile](http://tomee.apache.org/comparison.html).
+    </td>
   </tr>
   <tr>
     <td><strong>Tags</strong></td>
