@@ -180,7 +180,7 @@ module Package
 
           dependency_versions << {
             'id'      => id,
-            'name'    => NAME_MAPPINGS[id] || 'UNKNOWN',
+            'name'    => NAME_MAPPINGS[id] || "UNKNOWN (#{id})",
             'uri'     => uri,
             'version' => version
           }
@@ -214,7 +214,7 @@ module Package
         v    = versions
 
         rows = v['dependencies']
-               .sort_by { |dependency| dependency['name'] }
+               .sort_by { |dependency| dependency['name'].downcase }
                .map { |dependency| [dependency['name'], dependency['version']] }
 
         puts Terminal::Table.new title: "Java Buildpack #{v['buildpack']}", rows: rows
