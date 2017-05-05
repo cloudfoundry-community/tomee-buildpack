@@ -70,8 +70,10 @@ module Package
       'postgresql_jdbc'                     => 'PostgreSQL JDBC Driver',
       'protect_app_security_provider'       => 'Gemalto ProtectApp Security Provider',
       'redis_store'                         => 'Redis Session Store',
+      'resource_configuration'              => 'TomEE Resource Configuration',
       'spring_auto_reconfiguration'         => 'Spring Auto-reconfiguration',
       'spring_boot_cli'                     => 'Spring Boot CLI',
+      'tomee'                               => 'TomEE',
       'tomcat'                              => 'Tomcat',
       'your_kit_profiler'                   => 'YourKit Profiler'
     }.freeze
