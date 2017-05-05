@@ -217,7 +217,7 @@ module Package
                .sort_by { |dependency| dependency['name'].downcase }
                .map { |dependency| [dependency['name'], dependency['version']] }
 
-        puts Terminal::Table.new title: "Java Buildpack #{v['buildpack']}", rows: rows
+        puts Terminal::Table.new title: "TomEE Buildpack #{v['buildpack']}", rows: rows
       end
     end
 
