@@ -27,9 +27,15 @@ module JavaBuildpack
       def compile
         download(@version, @uri) { |file| expand file }
         link_to(@application.root.children, root)
-        unless ear?
-          @droplet.additional_libraries << tomcat_datasource_jar if tomcat_datasource_jar.exist?
+        if ear?
+          # if there is a drivers subfolder in the ear app, then link the libraries over to tomee/lib folder
+          if drivers?
+            link_to((@application.root + 'drivers').children, web_inf_lib)
+          end
+        elsif tomcat_datasource_jar.exist?
+          @droplet.additional_libraries << tomcat_datasource_jar
         end
+
         @droplet.additional_libraries.link_to web_inf_lib
       end
 
@@ -57,6 +63,10 @@ module JavaBuildpack
 
       def ear?
         (@application.root + 'META-INF/application.xml').exist?
+      end
+
+      def drivers?
+        (@application.root + 'drivers/').exist?
       end
 
     end
