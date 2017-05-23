@@ -1,0 +1,4 @@
+<resources>
+  <Resource id="My Test Resource" type="my.test.Resource" provider="my.test#Provider"/>
+  <Resource id="jdbc/test" type="javax.sql.DataSource"/>
+</resources>

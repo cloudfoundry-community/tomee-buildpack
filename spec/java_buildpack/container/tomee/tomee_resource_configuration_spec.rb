@@ -113,6 +113,22 @@ provider='my.test#Provider'/>})
       expect(resources_xml.read).to match(%r{<Resource id='jdbc/test' type='DataSource' \
 properties-provider='org.cloudfoundry.reconfiguration.tomee.DelegatingPropertiesProvider'/>})
     end
+
+    it 'updates Resource element in resources.xml when such element already exists',
+       cache_fixture: 'stub-resource-configuration.jar',
+       app_fixture: 'container_tomee_nonempty_resources_xml_existing_resource' do
+
+      web_inf = app_dir + 'WEB-INF'
+      resources_xml = web_inf + 'resources.xml'
+      expect(resources_xml).to exist
+
+      component.compile
+
+      expect(resources_xml.read).to match(%r{<Resource id='My Test Resource' type='my.test.Resource' \
+provider='my.test#Provider'/>})
+      expect(resources_xml.read).to match(%r{<Resource id='jdbc/test' type='javax.sql.DataSource' \
+properties-provider='org.cloudfoundry.reconfiguration.tomee.DelegatingPropertiesProvider'/>})
+    end
   end
 
 end
