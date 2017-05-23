@@ -30,13 +30,13 @@ module JavaBuildpack
         if ear?
           # if there is a drivers subfolder in the ear app, then link the libraries over to tomee/lib folder
           if drivers?
-            link_to((@application.root + 'drivers').children, web_inf_lib)
+            link_to((@application.root + 'drivers').children, lib_folder)
           end
         elsif tomcat_datasource_jar.exist?
           @droplet.additional_libraries << tomcat_datasource_jar
         end
 
-        @droplet.additional_libraries.link_to web_inf_lib
+        @droplet.additional_libraries.link_to lib_folder
       end
 
       protected
@@ -52,12 +52,11 @@ module JavaBuildpack
 
       private
 
-      def web_inf_lib
+      def lib_folder
         if ear?
-          # copy additional libraries to tomee lib folder
           tomcat_lib
         else
-          @droplet.root + 'WEB-INF/lib'
+          web_inf_lib
         end
       end
 
