@@ -76,11 +76,14 @@ module JavaBuildpack
       end
 
       def add_relational_resource(service, resources)
-        resources.add_element 'Resource',
-                              'id' => "jdbc/#{service['name']}",
-                              'type' => 'DataSource',
-                              'properties-provider' =>
-                              'org.cloudfoundry.reconfiguration.tomee.DelegatingPropertiesProvider'
+        resource = REXML::XPath.match(resources, "//*[@id = 'jdbc/#{service['name']}']").first
+        if resource.nil?
+          resource = resources.add_element 'Resource',
+                                           'id' => "jdbc/#{service['name']}",
+                                           'type' => 'DataSource'
+        end
+        resource.add_attribute 'properties-provider',
+                               'org.cloudfoundry.reconfiguration.tomee.DelegatingPropertiesProvider'
       end
 
       def resources_xml
