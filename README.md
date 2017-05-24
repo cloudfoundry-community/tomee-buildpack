@@ -73,6 +73,7 @@ To learn how to configure various properties of the buildpack, follow the "Confi
 	* [TomEE](docs/container-tomee.md) ([Configuration](docs/container-tomee.md#configuration))
 * Standard Frameworks
 	* [AppDynamics Agent](docs/framework-app_dynamics_agent.md) ([Configuration](docs/framework-app_dynamics_agent.md#configuration))
+	* [Container Certificate Trust Store](docs/framework-container_certificate_trust_store.md) ([Configuration](docs/framework-container_certificate_trust_store.md#configuration))
 	* [Container Customizer](docs/framework-container_customizer.md) ([Configuration](docs/framework-container_customizer.md#configuration))
 	* [Debug](docs/framework-debug.md) ([Configuration](docs/framework-debug.md#configuration))
 	* [Dyadic EKM Security Provider](docs/framework-dyadic_ekm_security_provider.md) ([Configuration](docs/framework-dyadic_ekm_security_provider.md#configuration))
