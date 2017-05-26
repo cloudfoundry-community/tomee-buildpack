@@ -59,4 +59,5 @@ frameworks:
   - "JavaBuildpack::Framework::SpringAutoReconfiguration"
   - "JavaBuildpack::Framework::SpringInsight"
   - "JavaBuildpack::Framework::YourKitProfiler"
+  - "JavaBuildpack::Framework::SecurityProviders"
   - "JavaBuildpack::Framework::JavaOpts"
