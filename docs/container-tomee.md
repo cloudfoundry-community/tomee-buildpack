@@ -1,9 +1,11 @@
 # TomEE Container
-The TomEE Container provides Java EE 6 Web Profile.  Applications are run as the root web application in a TomEE container.
+The TomEE Container provides Java EE 7 Web Profile.  Applications are run as the root web application in a TomEE container.
 
 <table>
   <tr>
-    <td><strong>Detection Criterion</strong></td><td>Existence of a <tt>WEB-INF/</tt> folder in the application directory and <a href="container-java_main.md">Java Main</a> not detected. If a META-INF/application.xml file is present then the application is considered an ear file and a deployment attempted. Note that TomEE supports only the JEE 7 [Web Profile](http://tomee.apache.org/comparison.html).
+    <td><strong>Detection Criterion</strong></td>
+    <td>Existence of a <tt>WEB-INF/</tt> folder in the application directory and <a href="container-java_main.md">Java Main</a> not detected. 
+    If a <tt>META-INF/application.xml</tt> file is present then the application is considered an ear file. Note that TomEE supports only the JEE 7 [Web Profile](http://tomee.apache.org/comparison.html).
     </td>
   </tr>
   <tr>
@@ -121,6 +123,29 @@ This configuration consists of:
 * properties provider - `org.cloudfoundry.reconfiguration.tomee.DelegatingPropertiesProvider` that will supply the configuration properties for the corresponding cloud service.
 
 This functionality can be found in the [`tomee-buildpack-resource-configuration`][] Git repository.
+
+## Support for Deploying an ear(Enterprise Application aRchive) file
+TomEE buildpack supports the deployment of an [ear file](https://en.wikipedia.org/wiki/EAR_(file_format)) conforming to the Java EE 7 Web Profile. The expectation is that an ear file package a `META-INF/application.xml`, the deployment descriptor specifying all the modules packaged in the ear.
+Any external resources that the application requires can be specified in a [`META-INF/resources.xml`](http://tomee.apache.org/application-resources.html) file and is modified as described in [Resources Auto Configuration](#tomee-resources-auto-configuration) section.
+If the application requires any additional drivers for resources specified in the `META-INF/resources.xml` file then it can be packaged into a `drivers` folder and any file present here will be available for use by TomEE classloaders. 
+A sample structure of the ear with `META-INF/application.xml`, `drivers` and `META-INF/resources.xml` is the following:
+
+```
+sample.ear
+|____drivers
+| |____h2-1.4.193.jar
+|____eartest-ejb-impl-1.0.jar
+|____eartest-war1-1.0.war
+|____eartest-war2-1.0.war
+|____lib
+| |____eartest-ejb-api-1.0.jar
+|____META-INF
+| |____application.xml
+| |____resources.xml
+|____war-with-resource-1.0.war
+
+```
+
 
 [Configuration and Extension]: ../README.md#configuration-and-extension
 [`config/tomee.yml`]: ../config/tomee.yml
