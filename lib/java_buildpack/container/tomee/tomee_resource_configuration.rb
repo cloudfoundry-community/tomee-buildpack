@@ -87,11 +87,7 @@ module JavaBuildpack
       end
 
       def resources_xml
-        if ear?
-          @droplet.root + 'META-INF/resources.xml'
-        else
-          @droplet.root + 'WEB-INF/resources.xml'
-        end
+        ear? ? @droplet.root + 'META-INF/resources.xml' : @droplet.root + 'WEB-INF/resources.xml'
       end
 
       def read_xml(file)

@@ -51,16 +51,18 @@ module JavaBuildpack
         true
       end
 
-      TOMCAT_8 = JavaBuildpack::Util::TokenizedVersion.new('8.0.0').freeze
-
-      private_constant :TOMCAT_8
-
       # Checks whether Tomcat instance is Tomcat 7 compatible
+      #
+      # @return [Boolean] whether the Tomcat instance is Tomcat 7 compatible
       def tomcat_7_compatible
         @version < TOMCAT_8
       end
 
       private
+
+      TOMCAT_8 = JavaBuildpack::Util::TokenizedVersion.new('8.0.0').freeze
+
+      private_constant :TOMCAT_8
 
       def configure_jasper
         return unless tomcat_7_compatible
