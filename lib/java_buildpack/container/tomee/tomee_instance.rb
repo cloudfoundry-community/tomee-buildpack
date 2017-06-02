@@ -27,11 +27,9 @@ module JavaBuildpack
       def compile
         download(@version, @uri) { |file| expand file }
         link_to(@application.root.children, root)
+
         if ear?
-          # if there is a drivers subfolder in the ear app, then link the libraries over to tomee/lib folder
-          if drivers?
-            link_to((@application.root + 'drivers').children, lib_folder)
-          end
+          link_to((@application.root + 'drivers').children, lib_folder) if drivers?
         elsif tomcat_datasource_jar.exist?
           @droplet.additional_libraries << tomcat_datasource_jar
         end
@@ -41,31 +39,27 @@ module JavaBuildpack
 
       protected
 
-      TOMEE_7 = JavaBuildpack::Util::TokenizedVersion.new('7.0.0').freeze
-
-      private_constant :TOMEE_7
-
-      # Checks whether TomEE instance is Tomcat 7 compatible
+      # (see JavaBuildpack::Container::TomcatInstance#tomcat_7_compatible)
       def tomcat_7_compatible
         @version < TOMEE_7
       end
 
       private
 
-      def lib_folder
-        if ear?
-          tomcat_lib
-        else
-          web_inf_lib
-        end
+      TOMEE_7 = JavaBuildpack::Util::TokenizedVersion.new('7.0.0').freeze
+
+      private_constant :TOMEE_7
+
+      def drivers?
+        (@application.root + 'drivers/').exist?
       end
 
       def ear?
         (@application.root + 'META-INF/application.xml').exist?
       end
 
-      def drivers?
-        (@application.root + 'drivers/').exist?
+      def lib_folder
+        ear? ? tomcat_lib : web_inf_lib
       end
 
     end
