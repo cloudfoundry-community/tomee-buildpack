@@ -8,7 +8,7 @@ The Tomcat Container allows servlet 2 and 3 web applications to be run.  These a
   </tr>
   <tr>
     <td><strong>Tags</strong></td>
-    <td><tt>tomcat-instance=&lang;version&rang;</tt>, <tt>tomcat-lifecycle-support=&lang;version&rang;</tt>, <tt>tomcat-logging-support=&lang;version&rang;</tt>, <tt>tomcat-redis-store=&lang;version&rang;</tt> <i>(optional)</i>, <tt>tomcat-external_configuration=&lang;version&rang;</tt> <i>(optional)</i></td>
+    <td><tt>tomcat-instance=&lang;version&rang;</tt>, <tt>tomcat-lifecycle-support=&lang;version&rang;</tt>, <tt>tomcat-logging-support=&lang;version&rang;</tt>, <tt>tomcat-redis-store=&lang;version&rang;</tt> <i>(optional)</i>, <tt>tomcat-external-configuration=&lang;version&rang;</tt> <i>(optional)</i></td>
   </tr>
 </table>
 Tags are printed to standard output by the buildpack detect script
