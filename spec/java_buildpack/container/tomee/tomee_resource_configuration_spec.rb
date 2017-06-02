@@ -131,4 +131,54 @@ properties-provider='org.cloudfoundry.reconfiguration.tomee.DelegatingProperties
     end
   end
 
+  context do
+
+    before do
+      allow(services).to receive(:each).and_yield('name' => 'test',
+                                                  'tags' => ['relational'])
+    end
+
+    it 'creates resources.xml in ear packages if not present',
+       cache_fixture: 'stub-resource-configuration.jar',
+       app_fixture: 'container_ear_structure' do
+
+      meta_inf = app_dir + 'META-INF'
+      resources_xml = meta_inf + 'resources.xml'
+      expect(resources_xml).not_to exist
+
+      component.compile
+
+      expect(resources_xml).to exist
+    end
+
+    it 'adds Resource element to empty resources.xml with root element only in ear packages',
+       cache_fixture: 'stub-resource-configuration.jar',
+       app_fixture: 'container_ear_structure_empty_resource' do
+
+      meta_inf = app_dir + 'META-INF'
+      resources_xml = meta_inf + 'resources.xml'
+      expect(resources_xml).to exist
+
+      component.compile
+
+      expect(resources_xml.read).to match(%r{<Resource id='jdbc/test' type='DataSource' \
+properties-provider='org.cloudfoundry.reconfiguration.tomee.DelegatingPropertiesProvider'/>})
+    end
+
+    it 'adds Resource element to non-empty resources.xml',
+       cache_fixture: 'stub-resource-configuration.jar',
+       app_fixture: 'container_ear_structure_with_resource' do
+
+      meta_inf = app_dir + 'META-INF'
+      resources_xml = meta_inf + 'resources.xml'
+      expect(resources_xml).to exist
+
+      component.compile
+
+      expect(resources_xml.read).to match(%r{<Resource id='My Test Resource' type='my.test.Resource' \
+provider='my.test#Provider'/>})
+      expect(resources_xml.read).to match(%r{<Resource id='jdbc/test' type='DataSource' \
+properties-provider='org.cloudfoundry.reconfiguration.tomee.DelegatingPropertiesProvider'/>})
+    end
+  end
 end
