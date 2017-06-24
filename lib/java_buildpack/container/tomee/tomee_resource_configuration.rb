@@ -54,7 +54,7 @@ module JavaBuildpack
       end
 
       def mutate_resources_xml
-        with_timing 'Modifying /WEB-INF/resources.xml for Resource Configuration' do
+        with_timing "Modifying #{resources_xml} for Resource Configuration" do
           document = read_xml resources_xml
           @logger.debug { "  Original resources.xml: #{document}" }
 
@@ -87,11 +87,15 @@ module JavaBuildpack
       end
 
       def resources_xml
-        @droplet.root + 'WEB-INF/resources.xml'
+        ear? ? @droplet.root + 'META-INF/resources.xml' : @droplet.root + 'WEB-INF/resources.xml'
       end
 
       def read_xml(file)
         File.open(file, 'a+') { |f| REXML::Document.new f }
+      end
+
+      def ear?
+        (@application.root + 'META-INF/application.xml').exist?
       end
 
     end

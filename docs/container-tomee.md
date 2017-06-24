@@ -1,13 +1,15 @@
 # TomEE Container
-The TomEE Container provides Java EE 6 Web Profile.  Applications are run as the root web application in a TomEE container.
+The TomEE Container provides Java EE 7 Web Profile.  Applications are run as the root web application in a TomEE container.
 
 <table>
   <tr>
-    <td><strong>Detection Criterion</strong></td><td>Existence of a <tt>WEB-INF/</tt> folder in the application directory and <a href="container-java_main.md">Java Main</a> not detected</td>
+    <td><strong>Detection Criterion</strong></td>
+    <td>Existence of a <tt>WEB-INF/</tt> folder in the application directory and <a href="container-java_main.md">Java Main</a> not detected. If a <tt>META-INF/application.xml</tt> file is present then the application is considered an EAR file. Note that TomEE supports only the JEE 7 <a href="http://tomee.apache.org/comparison.html">Web Profile</a>.
+    </td>
   </tr>
   <tr>
     <td><strong>Tags</strong></td>
-    <td><tt>tomee-instance=&lang;version&rang;</tt>, <tt>tomcat-lifecycle-support=&lang;version&rang;</tt>, <tt>tomcat-logging-support=&lang;version&rang;</tt>, <tt>tomcat-redis-store=&lang;version&rang;</tt> <i>(optional)</i>, <tt>tomcat-external_configuration=&lang;version&rang;</tt> <i>(optional)</i>, <tt>tomee-resource-configuration=&lang;version&rang;</tt> <i>(optional)</i></td>
+    <td><tt>tomee-instance=&lang;version&rang;</tt>, <tt>tomcat-lifecycle-support=&lang;version&rang;</tt>, <tt>tomcat-logging-support=&lang;version&rang;</tt>, <tt>tomcat-redis-store=&lang;version&rang;</tt> <i>(optional)</i>, <tt>tomcat-external-configuration=&lang;version&rang;</tt> <i>(optional)</i>, <tt>tomee-resource-configuration=&lang;version&rang;</tt> <i>(optional)</i></td>
   </tr>
 </table>
 Tags are printed to standard output by the buildpack detect script
@@ -121,13 +123,35 @@ This configuration consists of:
 
 This functionality can be found in the [`tomee-buildpack-resource-configuration`][] Git repository.
 
-[Configuration and Extension]: ../README.md#configuration-and-extension
+## Support for Deploying an EAR (Enterprise Application aRchive) file
+TomEE buildpack supports the deployment of an [EAR file][] conforming to the Java EE 7 Web Profile. The expectation is that an EAR file will package a `META-INF/application.xml`; the deployment descriptor specifying all the modules packaged in the EAR.  Any external resources that the application requires can be specified in a [`META-INF/resources.xml`][] file and is modified as described in [Resources Auto Configuration][] section.  If the application requires any additional drivers for resources specified in the `META-INF/resources.xml` file then it can be packaged into a `drivers` folder and any file present here will be available for use by TomEE classloaders.  A sample structure of the EAR with `META-INF/application.xml`, `drivers` and `META-INF/resources.xml` is the following:
+
+```
+sample.ear
+|____drivers
+| |____h2-1.4.193.jar
+|____eartest-ejb-impl-1.0.jar
+|____eartest-war1-1.0.war
+|____eartest-war2-1.0.war
+|____lib
+| |____eartest-ejb-api-1.0.jar
+|____META-INF
+| |____application.xml
+| |____resources.xml
+|____war-with-resource-1.0.war
+
+```
+
 [`config/tomee.yml`]: ../config/tomee.yml
 [`java-buildpack-support`]: https://github.com/cloudfoundry/java-buildpack-support
-[repositories]: extending-repositories.md
-[Spring profiles]:http://blog.springsource.com/2011/02/14/spring-3-1-m1-introducing-profile/
+[`META-INF/resources.xml`]: http://tomee.apache.org/application-resources.html
 [`SPRING_PROFILES_ACTIVE`]: http://docs.spring.io/spring/docs/4.0.0.RELEASE/javadoc-api/org/springframework/core/env/AbstractEnvironment.html#ACTIVE_PROFILES_PROPERTY_NAME
+[`tomee-buildpack-resource-configuration`]: https://github.com/cloudfoundry-community/tomee-buildpack-resource-configuration
+[Configuration and Extension]: ../README.md#configuration-and-extension
+[EAR file]: https://en.wikipedia.org/wiki/EAR_(file_format)
+[repositories]: extending-repositories.md
+[Resources Auto Configuration]: #tomee-resources-auto-configuration
+[Spring profiles]:http://blog.springsource.com/2011/02/14/spring-3-1-m1-introducing-profile/
+[Tomcat 7 configuration]: http://tomcat.apache.org/tomcat-7.0-doc/config/context.html#Standard_Implementation
 [Tomcat wiki]: http://wiki.apache.org/tomcat/HowTo/FasterStartUp
 [version syntax]: extending-repositories.md#version-syntax-and-ordering
-[Tomcat 7 configuration]: http://tomcat.apache.org/tomcat-7.0-doc/config/context.html#Standard_Implementation
-[`tomee-buildpack-resource-configuration`]: https://github.com/cloudfoundry-community/tomee-buildpack-resource-configuration
