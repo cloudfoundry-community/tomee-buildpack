@@ -181,4 +181,157 @@ provider='my.test#Provider'/>})
 properties-provider='org.cloudfoundry.reconfiguration.tomee.DelegatingPropertiesProvider'/>})
     end
   end
+
+  context do
+    let(:vcap_services) do
+      {
+        'test-service-relational-tag' => [{ 'name'        => 'test-service-relational-tag', 'label' => 'label-1',
+                                            'tags'        => %w[tag1 relational], 'plan' => 'test-plan',
+                                            'credentials' => { 'uri' => 'test-uri' } }]
+      }
+    end
+
+    it 'adds resource element for services tagged with relational',
+       cache_fixture: 'stub-resource-configuration.jar',
+       app_fixture:   'container_ear_structure_empty_resource' do
+      meta_inf      = app_dir + 'META-INF'
+      resources_xml = meta_inf + 'resources.xml'
+      expect(resources_xml).to exist
+
+      component.compile
+
+      expect(resources_xml.read).to match(%r{<Resource id='jdbc/test-service-relational-tag' type='DataSource' \
+properties-provider='org.cloudfoundry.reconfiguration.tomee.DelegatingPropertiesProvider'/>})
+    end
+  end
+
+  context do
+    let(:vcap_services) do
+      {
+        'test-service-mysql-schema' => [{ 'name'        => 'test-service-mysql-schema',
+                                          'tags'        => [],
+                                          'credentials' => {
+                                            'jdbcUrl': 'jdbc:mysql://auser:apass@hostname.com:3306/mydb'
+                                          } }]
+      }
+    end
+
+    it 'adds resource element for services with jdbcUrl starting with jdbc:mysql',
+       cache_fixture: 'stub-resource-configuration.jar',
+       app_fixture:   'container_ear_structure_empty_resource' do
+      meta_inf      = app_dir + 'META-INF'
+      resources_xml = meta_inf + 'resources.xml'
+      expect(resources_xml).to exist
+
+      component.compile
+
+      expect(resources_xml.read).to match(%r{<Resource id='jdbc/test-service-mysql-schema' type='DataSource' \
+properties-provider='org.cloudfoundry.reconfiguration.tomee.DelegatingPropertiesProvider'/>})
+    end
+
+  end
+
+  context do
+    let(:vcap_services) do
+      {
+        'test-service-postgresql-schema' => [{ 'name'        => 'test-service-postgresql-schema',
+                                               'tags'        => [],
+                                               'credentials' => {
+                                                 'jdbcUrl': 'jdbc:postgresql://auser:apass@hostname.com:1521/mydb'
+                                               } }]
+      }
+    end
+
+    it 'adds resource element for services with jdbcUrl starting with jdbc:postgresql',
+       cache_fixture: 'stub-resource-configuration.jar',
+       app_fixture:   'container_ear_structure_empty_resource' do
+      meta_inf      = app_dir + 'META-INF'
+      resources_xml = meta_inf + 'resources.xml'
+      expect(resources_xml).to exist
+
+      component.compile
+
+      expect(resources_xml.read).to match(%r{<Resource id='jdbc/test-service-postgresql-schema' \
+type='DataSource' properties-provider='org.cloudfoundry.reconfiguration.tomee.DelegatingPropertiesProvider'/>})
+    end
+
+  end
+
+  context do
+    let(:vcap_services) do
+      {
+        'test-service-oracle-schema' => [{ 'name'        => 'test-service-oracle-schema',
+                                           'tags'        => [],
+                                           'credentials' => {
+                                             'jdbcUrl': 'jdbc:oracle://auser:apass@hostname.com:432/mydb'
+                                           } }]
+      }
+    end
+
+    it 'adds resource element for services with jdbcUrl starting with jdbc:oracle',
+       cache_fixture: 'stub-resource-configuration.jar',
+       app_fixture:   'container_ear_structure_empty_resource' do
+      meta_inf      = app_dir + 'META-INF'
+      resources_xml = meta_inf + 'resources.xml'
+      expect(resources_xml).to exist
+
+      component.compile
+
+      expect(resources_xml.read).to match(%r{<Resource id='jdbc/test-service-oracle-schema' \
+type='DataSource' properties-provider='org.cloudfoundry.reconfiguration.tomee.DelegatingPropertiesProvider'/>})
+    end
+
+  end
+
+  context do
+    let(:vcap_services) do
+      {
+        'test-service-db2-schema' => [{ 'name'        => 'test-service-db2-schema',
+                                        'tags'        => [],
+                                        'credentials' => {
+                                          'jdbcUrl': 'jdbc:db2://auser:apass@hostname.com:543/mydb'
+                                        } }]
+      }
+    end
+
+    it 'adds resource element for services with jdbcUrl starting with jdbc:db2',
+       cache_fixture: 'stub-resource-configuration.jar',
+       app_fixture:   'container_ear_structure_empty_resource' do
+      meta_inf      = app_dir + 'META-INF'
+      resources_xml = meta_inf + 'resources.xml'
+      expect(resources_xml).to exist
+
+      component.compile
+
+      expect(resources_xml.read).to match(%r{<Resource id='jdbc/test-service-db2-schema' \
+type='DataSource' properties-provider='org.cloudfoundry.reconfiguration.tomee.DelegatingPropertiesProvider'/>})
+    end
+
+  end
+
+  context do
+    let(:vcap_services) do
+      {
+        'test-service-sqlserver-schema' => [{ 'name'        => 'test-service-sqlserver-schema',
+                                              'tags'        => [],
+                                              'credentials' => {
+                                                'jdbcUrl': 'jdbc:sqlserver://auser:apass@hostname.com:4407/mydb'
+                                              } }]
+      }
+    end
+
+    it 'adds resource element for services with jdbcUrl starting with jdbc:sqlserver',
+       cache_fixture: 'stub-resource-configuration.jar',
+       app_fixture:   'container_ear_structure_empty_resource' do
+      meta_inf      = app_dir + 'META-INF'
+      resources_xml = meta_inf + 'resources.xml'
+      expect(resources_xml).to exist
+
+      component.compile
+
+      expect(resources_xml.read).to match(%r{<Resource id='jdbc/test-service-sqlserver-schema' \
+type='DataSource' properties-provider='org.cloudfoundry.reconfiguration.tomee.DelegatingPropertiesProvider'/>})
+    end
+
+  end
 end
