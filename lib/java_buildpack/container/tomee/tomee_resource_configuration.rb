@@ -70,9 +70,15 @@ module JavaBuildpack
 
       def relational_services_as_resources(resources)
         @application.services.each do |service|
-          next unless service['tags'].include? 'relational'
-          add_relational_resource service, resources
+          if (service['tags'].include? 'relational') || well_known_jdbc_schema?(service['credentials'])
+            add_relational_resource service, resources
+          end
         end
+      end
+
+      def well_known_jdbc_schema?(creds)
+        creds.key?('jdbcUrl') &&
+          creds['jdbcUrl'].start_with?('jdbc:mysql', 'jdbc:postgresql', 'jdbc:oracle', 'jdbc:db2', 'jdbc:sqlserver')
       end
 
       def add_relational_resource(service, resources)
