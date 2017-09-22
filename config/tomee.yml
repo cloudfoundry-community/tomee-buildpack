@@ -16,7 +16,7 @@
 # Configuration for the Tomee container
 ---
 tomee:
-  version: 7.0.+
+  version: 7.0.3
   repository_root: "{default.repository.root}/tomee"
   context_path: 
   external_configuration_enabled: false
@@ -24,21 +24,21 @@ external_configuration:
   version: 1.+
   repository_root: 
 lifecycle_support:
-  version: 2.+
+  version: 2.5.0_RELEASE
   repository_root: "{default.repository.root}/tomcat-lifecycle-support"
 logging_support:
-  version: 2.+
+  version: 2.5.0_RELEASE
   repository_root: "{default.repository.root}/tomcat-logging-support"
 access_logging_support:
-  version: 2.+
+  version: 2.5.0_RELEASE
   repository_root: "{default.repository.root}/tomcat-access-logging-support"
   access_logging: disabled
 resource_configuration:
-  version: 1.+
+  version: 1.4.0_RELEASE
   repository_root: "{default.repository.root}/tomee-resource-configuration"
   enabled: true
 redis_store:
-  version: 1.+
+  version: 1.3.6_RELEASE
   repository_root: "{default.repository.root}/redis-store"
   database: 0
   timeout: 2000
