@@ -18,7 +18,7 @@ require 'component_helper'
 require 'java_buildpack/container/tomee/tomee_resource_configuration'
 
 describe JavaBuildpack::Container::TomeeResourceConfiguration do
-  include_context 'component_helper'
+  include_context 'with component help'
 
   let(:component_id) { 'tomee' }
 

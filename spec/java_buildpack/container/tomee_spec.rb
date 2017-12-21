@@ -25,7 +25,7 @@ require 'java_buildpack/container/tomcat/tomcat_redis_store'
 require 'java_buildpack/container/tomee'
 
 describe JavaBuildpack::Container::Tomee do
-  include_context 'component_helper'
+  include_context 'with component help'
 
   let(:component) { StubTomee.new context }
 
