@@ -314,6 +314,61 @@ type='DataSource' properties-provider='org.cloudfoundry.reconfiguration.tomee.De
   context do
     let(:vcap_services) do
       {
+        'simple-dont-want-a-resource' => [{ 'name'        => 'my_service',
+                                            'tags'        => [],
+                                            'credentials' => {
+                                              'includeInResources': 'false'
+                                            } }]
+      }
+    end
+
+    it 'creates a simple resource file with no nodes',
+       cache_fixture: 'stub-resource-configuration.jar',
+       app_fixture:   'container_ear_structure_empty_resource' do
+      meta_inf      = app_dir + 'META-INF'
+      resources_xml = meta_inf + 'resources.xml'
+      expect(resources_xml).to exist
+
+      component.compile
+
+      expect(resources_xml.read).to match(%r{<resources>\s*</resources>})
+    end
+
+  end
+
+  context do
+    let(:vcap_services) do
+      {
+        'want-a-resource-with-attrs-and-props' => [{ 'name'        => 'my_service',
+                                                     'tags'        => [],
+                                                     'credentials' => {
+                                                       'includeInResources': 'true',
+                                                       'id': 'myId',
+                                                       'class-name': 'my.org.package.class',
+                                                       'name1': 'val1',
+                                                       'name2': 'val2'
+                                                     } }]
+      }
+    end
+
+    it 'creates a resource file with one node and attrs and props populated',
+       cache_fixture: 'stub-resource-configuration.jar',
+       app_fixture:   'container_ear_structure_empty_resource' do
+      meta_inf      = app_dir + 'META-INF'
+      resources_xml = meta_inf + 'resources.xml'
+      expect(resources_xml).to exist
+
+      component.compile
+
+      expect(resources_xml.read).to match(%r{<Resource id='myId' \
+class-name='my.org.package.class' \
+properties-provider='org.cloudfoundry.reconfiguration.tomee.GenericServicePropertiesProvider'/>})
+    end
+  end
+
+  context do
+    let(:vcap_services) do
+      {
         'test-service-sqlserver-schema' => [{ 'name'        => 'test-service-sqlserver-schema',
                                               'tags'        => [],
                                               'credentials' => {

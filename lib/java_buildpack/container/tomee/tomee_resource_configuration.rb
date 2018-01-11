@@ -55,6 +55,8 @@ module JavaBuildpack
         "tomee_resource_configuration-#{@version}.jar"
       end
 
+      CRED_PARAM_FLAG = 'includeInResources'
+
       def mutate_resources_xml
         with_timing "Modifying #{resources_xml} for Resource Configuration" do
           document = read_xml resources_xml
@@ -64,6 +66,7 @@ module JavaBuildpack
           resources  = document.add_element 'resources' if resources.nil?
 
           relational_services_as_resources resources
+          services_as_resources resources
 
           write_xml resources_xml, document
           @logger.debug { "  Modified resources.xml: #{document}" }
@@ -92,6 +95,30 @@ module JavaBuildpack
         end
         resource.add_attribute 'properties-provider',
                                'org.cloudfoundry.reconfiguration.tomee.DelegatingPropertiesProvider'
+      end
+
+      def services_as_resources(resources)
+        @application.services.each do |service|
+          next unless (service.include? 'credentials') &&
+            (service['credentials'].include? CRED_PARAM_FLAG) &&
+            (service['credentials'][CRED_PARAM_FLAG] == 'true')
+          add_resource service, resources
+        end
+      end
+
+      def add_resource(service, resources)
+        attribute_array = ['id', 'type', 'class-name', 'provider', 'factory-name',
+                           'classpath', 'aliases',
+                           'post-construct', 'pre-destroy', 'Lazy']
+
+        creds_hash = Hash[service['credentials'].map { |key, value| [key, value] } ]
+
+        # filter the hash into only those params that belong as attributes
+        creds_as_attributes = creds_hash.select { |x| attribute_array.include? x }
+
+        resource = resources.add_element 'Resource', creds_as_attributes
+        resource.add_attribute 'properties-provider',
+                               'org.cloudfoundry.reconfiguration.tomee.GenericServicePropertiesProvider'
       end
 
       def resources_xml
