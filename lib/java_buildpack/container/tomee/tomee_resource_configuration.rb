@@ -70,7 +70,7 @@ module JavaBuildpack
       end
 
       def relational_services_as_resources(resources)
-        @services.each do |service|
+        @application.services.each do |service|
           if (service['tags'].include? 'relational') || well_known_jdbc_schema?(service['credentials'])
             add_relational_resource service, resources
           end
@@ -94,7 +94,7 @@ module JavaBuildpack
       end
 
       def services_as_resources(resources)
-        @services.each do |service|
+        @application.services.each do |service|
           next unless (service['credentials'].include? CRED_PARAM_FLAG) && (service['credentials'][CRED_PARAM_FLAG] == 'true')
           add_resource service, resources
         end
