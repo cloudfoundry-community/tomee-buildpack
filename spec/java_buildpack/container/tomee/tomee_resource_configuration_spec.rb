@@ -315,8 +315,8 @@ type='DataSource' properties-provider='org.cloudfoundry.reconfiguration.tomee.De
         'simple-dont-want-a-resource' => [{ 'name'        => 'my_service',
                                             'tags'        => [],
                                             'credentials' => {
-                                            'includeInResources': 'false'
-                                              } }]
+                                              'includeInResources': 'false'
+                                            } }]
       }
     end
 
@@ -344,12 +344,12 @@ type='DataSource' properties-provider='org.cloudfoundry.reconfiguration.tomee.De
         'want-a-resource-with-attrs-and-props' => [{ 'name'        => 'my_service',
                                                      'tags'        => [],
                                                      'credentials' => {
-                                                'includeInResources': 'true',
-                                                'id': 'myId',
-                                                'class-name': 'my.org.package.class',
-                                                'name1': 'val1',
-                                                'name2': 'val2'
-                                              } }]
+                                                       'includeInResources': 'true',
+                                                       'id': 'myId',
+                                                       'class-name': 'my.org.package.class',
+                                                       'name1': 'val1',
+                                                       'name2': 'val2'
+                                                      } }]
       }
     end
 
@@ -366,7 +366,8 @@ type='DataSource' properties-provider='org.cloudfoundry.reconfiguration.tomee.De
       resources_xml = web_inf + 'resources.xml'
       expect(resources_xml).to exist
 
-      expect(resources_xml.read).to match(%r{<Resource id='myId' class-name='my.org.package.class'\s*>name1 = val1\s*name2 = val2\s*</Resource\s*>})
+      expect(resources_xml.read).to match(%r{<Resource id='myId' \
+        class-name='my.org.package.class'\s*>name1 = val1\s*name2 = val2\s*</Resource\s*>})
     end
   end
 

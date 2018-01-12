@@ -105,26 +105,25 @@ module JavaBuildpack
 
       def add_resource(service, resources)
         attribute_array = ['id', 'type', 'class-name', 'provider', 'factory-name',
-          'properties-provider', 'classpath', 'aliases', 'post-construct', 'pre-destroy', 'Lazy']
+                           'properties-provider', 'classpath', 'aliases',
+                          'post-construct', 'pre-destroy', 'Lazy']
 
-        creds_hash = Hash[service['credentials'].map {|key, value| [key, value]} ]
+        creds_hash = Hash[service['credentials'].map { |key, value| [key, value] } ]
 
         # split the hash into two pieces:  one where they should be included as attributes
         # and one where they should be included as properties
-        creds_as_attributes = creds_hash.select{ |x| attribute_array.include? x }
-        creds_as_properties = creds_hash.reject{ |x| attribute_array.include? x }
+        creds_as_attributes = creds_hash.select { |x| attribute_array.include? x }
+        creds_as_properties = creds_hash.reject { |x| attribute_array.include? x }
 
         # remove the flag param as a property
-        credsAsProperties = creds_as_properties.select{ |x| (x != CRED_PARAM_FLAG) }
+        creds_as_properties = creds_as_properties.reject { |x| (x == CRED_PARAM_FLAG) }
 
         resource = resources.add_element 'Resource', creds_as_attributes
 
         creds_as_properties.each do |key, value|
 
           resource.add_text REXML::Text.new((key + ' = ' + value + '\n'), true)
-
         end
-
       end
 
       def resources_xml
