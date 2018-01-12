@@ -53,7 +53,7 @@ module JavaBuildpack
         "tomee_resource_configuration-#{@version}.jar"
       end
 
-      CRED_PARAM_FLAG = 'includeInResources'
+      CRED_PARAM_FLAG = 'includeInResources'.freeze
 
       def mutate_resources_xml
         with_timing "Modifying #{resources_xml} for Resource Configuration" do

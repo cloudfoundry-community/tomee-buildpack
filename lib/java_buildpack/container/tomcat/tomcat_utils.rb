@@ -89,7 +89,6 @@ module JavaBuildpack
       end
     end
 
-
     private
 
     def formatter_transitive
@@ -102,7 +101,6 @@ module JavaBuildpack
       formatter.compact = true
       formatter
     end
-
 
   end
 end
