@@ -109,7 +109,7 @@ properties-provider='org.cloudfoundry.reconfiguration.tomee.DelegatingProperties
       component.compile
 
       expect(resources_xml.read).to match(%r{<Resource id='My Test Resource' type='my.test.Resource' \
-provider='my.test#Provider'/>})
+provider='my.test#Provider'\s*/>})
       expect(resources_xml.read).to match(%r{<Resource id='jdbc/test' type='DataSource' \
 properties-provider='org.cloudfoundry.reconfiguration.tomee.DelegatingPropertiesProvider'\s*/>})
     end
@@ -125,7 +125,7 @@ properties-provider='org.cloudfoundry.reconfiguration.tomee.DelegatingProperties
       component.compile
 
       expect(resources_xml.read).to match(%r{<Resource id='My Test Resource' type='my.test.Resource' \
-provider='my.test#Provider'/>})
+provider='my.test#Provider'\s*/>})
       expect(resources_xml.read).to match(%r{<Resource id='jdbc/test' type='javax.sql.DataSource' \
 properties-provider='org.cloudfoundry.reconfiguration.tomee.DelegatingPropertiesProvider'\s*/>})
     end
@@ -176,7 +176,7 @@ properties-provider='org.cloudfoundry.reconfiguration.tomee.DelegatingProperties
       component.compile
 
       expect(resources_xml.read).to match(%r{<Resource id='My Test Resource' type='my.test.Resource' \
-provider='my.test#Provider'/>})
+provider='my.test#Provider'\s*/>})
       expect(resources_xml.read).to match(%r{<Resource id='jdbc/test' type='DataSource' \
 properties-provider='org.cloudfoundry.reconfiguration.tomee.DelegatingPropertiesProvider'\s*/>})
     end
@@ -320,20 +320,16 @@ type='DataSource' properties-provider='org.cloudfoundry.reconfiguration.tomee.De
       }
     end
 
-    it 'creates a simple resource file with no nodes' do
-
-      app_dir = Pathname.new Dir.mktmpdir
-
-      web_inf = app_dir + 'WEB-INF'
-
-      Dir.mkdir web_inf
-
-      ResourceConfig::BoundService.with_buildpack(app_dir)
-
-      resources_xml = web_inf + 'resources.xml'
+    it 'creates a simple resource file with no nodes',
+       cache_fixture: 'stub-resource-configuration.jar',
+       app_fixture:   'container_ear_structure_empty_resource' do
+      meta_inf      = app_dir + 'META-INF'
+      resources_xml = meta_inf + 'resources.xml'
       expect(resources_xml).to exist
 
-      expect(resources_xml.read).to match(%r{<resources\s*\/>})
+      component.compile
+
+      expect(resources_xml.read).to match(%r{<resources\s*>\s*</resources\s*>})
     end
 
   end
@@ -349,25 +345,21 @@ type='DataSource' properties-provider='org.cloudfoundry.reconfiguration.tomee.De
                                                        'class-name': 'my.org.package.class',
                                                        'name1': 'val1',
                                                        'name2': 'val2'
-                                                      } }]
+                                                     } }]
       }
     end
 
-    it 'creates a resource file with one node and attrs and props populated' do
-
-      app_dir = Pathname.new Dir.mktmpdir
-
-      web_inf = app_dir + 'WEB-INF'
-
-      Dir.mkdir web_inf
-
-      ResourceConfig::BoundService.with_buildpack(app_dir)
-
-      resources_xml = web_inf + 'resources.xml'
+    it 'creates a resource file with one node and attrs and props populated',
+       cache_fixture: 'stub-resource-configuration.jar',
+       app_fixture:   'container_ear_structure_empty_resource' do
+      meta_inf      = app_dir + 'META-INF'
+      resources_xml = meta_inf + 'resources.xml'
       expect(resources_xml).to exist
 
+      component.compile
+
       expect(resources_xml.read).to match(%r{<Resource id='myId' \
-        class-name='my.org.package.class'\s*>name1 = val1\s*name2 = val2\s*</Resource\s*>})
+class-name='my.org.package.class'\s*>name1 = val1\s*name2 = val2\s*</Resource\s*>})
     end
   end
 

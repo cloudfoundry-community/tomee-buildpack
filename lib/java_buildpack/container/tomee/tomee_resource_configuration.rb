@@ -97,7 +97,8 @@ module JavaBuildpack
 
       def services_as_resources(resources)
         @application.services.each do |service|
-          next unless (service['credentials'].include? CRED_PARAM_FLAG) &&
+          next unless (service.include? 'credentials') &&
+            (service['credentials'].include? CRED_PARAM_FLAG) &&
             (service['credentials'][CRED_PARAM_FLAG] == 'true')
           add_resource service, resources
         end
@@ -121,7 +122,6 @@ module JavaBuildpack
         resource = resources.add_element 'Resource', creds_as_attributes
 
         creds_as_properties.each do |key, value|
-
           resource.add_text REXML::Text.new((key + ' = ' + value + "\n"), true)
         end
       end
