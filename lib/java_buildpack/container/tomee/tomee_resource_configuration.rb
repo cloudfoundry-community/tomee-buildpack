@@ -106,7 +106,7 @@ module JavaBuildpack
       def add_resource(service, resources)
         attribute_array = ['id', 'type', 'class-name', 'provider', 'factory-name',
                            'properties-provider', 'classpath', 'aliases',
-                          'post-construct', 'pre-destroy', 'Lazy']
+                           'post-construct', 'pre-destroy', 'Lazy']
 
         creds_hash = Hash[service['credentials'].map { |key, value| [key, value] } ]
 
@@ -122,7 +122,7 @@ module JavaBuildpack
 
         creds_as_properties.each do |key, value|
 
-          resource.add_text REXML::Text.new((key + ' = ' + value + '\n'), true)
+          resource.add_text REXML::Text.new((key + ' = ' + value + "\n"), true)
         end
       end
 
