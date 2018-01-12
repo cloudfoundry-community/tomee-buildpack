@@ -313,9 +313,9 @@ type='DataSource' properties-provider='org.cloudfoundry.reconfiguration.tomee.De
     let(:vcap_services) do
       {
         'simple-dont-want-a-resource' => [{ 'name'        => 'my_service',
-                                              'tags'        => [],
-                                              'credentials' => {
-                                                'includeInResources': 'false'
+                                            'tags'        => [],
+                                            'credentials' => {
+                                            'includeInResources': 'false'
                                               } }]
       }
     end
@@ -342,8 +342,8 @@ type='DataSource' properties-provider='org.cloudfoundry.reconfiguration.tomee.De
     let(:vcap_services) do
       {
         'want-a-resource-with-attrs-and-props' => [{ 'name'        => 'my_service',
-                                              'tags'        => [],
-                                              'credentials' => {
+                                                     'tags'        => [],
+                                                     'credentials' => {
                                                 'includeInResources': 'true',
                                                 'id': 'myId',
                                                 'class-name': 'my.org.package.class',
