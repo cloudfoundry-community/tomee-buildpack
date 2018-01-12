@@ -16,6 +16,7 @@
 require 'java_buildpack'
 require 'rexml/document'
 require 'rexml/formatters/transitive'
+require 'rexml/formatters/pretty'
 
 module JavaBuildpack
   module Container
@@ -77,12 +78,31 @@ module JavaBuildpack
       end
     end
 
+    # Write a transitively formatted XML file
+    #
+    # @param [Pathname] file the file to write
+    # @return [Void]
+    def write_xml_transitive(file, document)
+      file.open('w') do |f|
+        formatter_transitive.write document, f
+        f << "\n"
+      end
+    end
+
+
     private
 
+    def formatter_transitive
+      formatter_transitive = REXML::Formatters::Transitive.new(4)
+      formatter_transitive
+    end
+
     def formatter
-      formatter = REXML::Formatters::Transitive.new(4)
+      formatter = REXML:Formatters:Pretty(4)
+      formatter.compact = true
       formatter
     end
+
 
   end
 end
