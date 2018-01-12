@@ -62,6 +62,7 @@ module JavaBuildpack
           resources  = document.add_element 'resources' if resources.nil?
 
           relational_services_as_resources resources
+          services_as_resources resources
 
           write_xml resources_xml, document
           @logger.debug { "  Modified resources.xml: #{document}" }
@@ -90,6 +91,37 @@ module JavaBuildpack
         end
         resource.add_attribute 'properties-provider',
                                'org.cloudfoundry.reconfiguration.tomee.DelegatingPropertiesProvider'
+      end
+
+      def services_as_resources(resources)
+        @services.each do |service|
+          next unless (service['credentials'].include? CRED_PARAM_FLAG) && (service['credentials'][CRED_PARAM_FLAG] == 'true')
+          add_resource service, resources
+        end
+      end
+
+      def add_resource(service, resources)
+
+        attributeArray = ['id', 'type', 'class-name', 'provider', 'factory-name', 'properties-provider', 'classpath', 'aliases', 'post-construct', 'pre-destroy', 'Lazy']
+
+        credsHash = Hash[service['credentials'].map {|key, value| [key, value]} ]
+
+        # split the hash into two pieces:  one where they should be included as attributes
+        # and one where they should be included as properties
+        credsAsAttributes = credsHash.select{|x| attributeArray.include? x}
+        credsAsProperties = credsHash.select{|x| !attributeArray.include? x}
+
+        # remove the flag param as a property
+        credsAsProperties = credsAsProperties.select{|x| (x != CRED_PARAM_FLAG)  }
+
+        resource = resources.add_element 'Resource', credsAsAttributes
+
+        credsAsProperties.each do |key, value|
+
+          resource.add_text REXML::Text.new((key + " = " + value + "\n"), true)
+
+        end
+
       end
 
       def resources_xml
