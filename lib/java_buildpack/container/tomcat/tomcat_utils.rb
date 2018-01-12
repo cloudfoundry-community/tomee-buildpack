@@ -98,7 +98,7 @@ module JavaBuildpack
     end
 
     def formatter
-      formatter = REXML:Formatters:Pretty(4)
+      formatter = REXML::Formatters::Pretty(4)
       formatter.compact = true
       formatter
     end
