@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Cloud Foundry TomEE Buildpack
 # Copyright 2013-2017 the original author or authors.
 #
