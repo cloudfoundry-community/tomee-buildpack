@@ -97,7 +97,7 @@ describe JavaBuildpack::Container::TomeeResourceConfiguration do
       component.compile
 
       expect(resources_xml.read).to match(%r{<Resource id='jdbc/test' type='DataSource' \
-properties-provider='org.cloudfoundry.reconfiguration.tomee.DelegatingPropertiesProvider'/>})
+properties-provider='org.cloudfoundry.reconfiguration.tomee.DelegatingPropertiesProvider'\s*/>})
     end
 
     it 'adds Resource element to non-empty resources.xml',
@@ -111,9 +111,9 @@ properties-provider='org.cloudfoundry.reconfiguration.tomee.DelegatingProperties
       component.compile
 
       expect(resources_xml.read).to match(%r{<Resource id='My Test Resource' type='my.test.Resource' \
-provider='my.test#Provider'/>})
+provider='my.test#Provider'\s*/>})
       expect(resources_xml.read).to match(%r{<Resource id='jdbc/test' type='DataSource' \
-properties-provider='org.cloudfoundry.reconfiguration.tomee.DelegatingPropertiesProvider'/>})
+properties-provider='org.cloudfoundry.reconfiguration.tomee.DelegatingPropertiesProvider'\s*/>})
     end
 
     it 'updates Resource element in resources.xml when such element already exists',
@@ -127,9 +127,9 @@ properties-provider='org.cloudfoundry.reconfiguration.tomee.DelegatingProperties
       component.compile
 
       expect(resources_xml.read).to match(%r{<Resource id='My Test Resource' type='my.test.Resource' \
-provider='my.test#Provider'/>})
+provider='my.test#Provider'\s*/>})
       expect(resources_xml.read).to match(%r{<Resource id='jdbc/test' type='javax.sql.DataSource' \
-properties-provider='org.cloudfoundry.reconfiguration.tomee.DelegatingPropertiesProvider'/>})
+properties-provider='org.cloudfoundry.reconfiguration.tomee.DelegatingPropertiesProvider'\s*/>})
     end
   end
 
@@ -164,7 +164,7 @@ properties-provider='org.cloudfoundry.reconfiguration.tomee.DelegatingProperties
       component.compile
 
       expect(resources_xml.read).to match(%r{<Resource id='jdbc/test' type='DataSource' \
-properties-provider='org.cloudfoundry.reconfiguration.tomee.DelegatingPropertiesProvider'/>})
+properties-provider='org.cloudfoundry.reconfiguration.tomee.DelegatingPropertiesProvider'\s*/>})
     end
 
     it 'adds Resource element to non-empty resources.xml',
@@ -178,9 +178,9 @@ properties-provider='org.cloudfoundry.reconfiguration.tomee.DelegatingProperties
       component.compile
 
       expect(resources_xml.read).to match(%r{<Resource id='My Test Resource' type='my.test.Resource' \
-provider='my.test#Provider'/>})
+provider='my.test#Provider'\s*/>})
       expect(resources_xml.read).to match(%r{<Resource id='jdbc/test' type='DataSource' \
-properties-provider='org.cloudfoundry.reconfiguration.tomee.DelegatingPropertiesProvider'/>})
+properties-provider='org.cloudfoundry.reconfiguration.tomee.DelegatingPropertiesProvider'\s*/>})
     end
   end
 
@@ -203,7 +203,7 @@ properties-provider='org.cloudfoundry.reconfiguration.tomee.DelegatingProperties
       component.compile
 
       expect(resources_xml.read).to match(%r{<Resource id='jdbc/test-service-relational-tag' type='DataSource' \
-properties-provider='org.cloudfoundry.reconfiguration.tomee.DelegatingPropertiesProvider'/>})
+properties-provider='org.cloudfoundry.reconfiguration.tomee.DelegatingPropertiesProvider'\s*/>})
     end
   end
 
@@ -228,7 +228,7 @@ properties-provider='org.cloudfoundry.reconfiguration.tomee.DelegatingProperties
       component.compile
 
       expect(resources_xml.read).to match(%r{<Resource id='jdbc/test-service-mysql-schema' type='DataSource' \
-properties-provider='org.cloudfoundry.reconfiguration.tomee.DelegatingPropertiesProvider'/>})
+properties-provider='org.cloudfoundry.reconfiguration.tomee.DelegatingPropertiesProvider'\s*/>})
     end
 
   end
@@ -254,7 +254,7 @@ properties-provider='org.cloudfoundry.reconfiguration.tomee.DelegatingProperties
       component.compile
 
       expect(resources_xml.read).to match(%r{<Resource id='jdbc/test-service-postgresql-schema' \
-type='DataSource' properties-provider='org.cloudfoundry.reconfiguration.tomee.DelegatingPropertiesProvider'/>})
+type='DataSource' properties-provider='org.cloudfoundry.reconfiguration.tomee.DelegatingPropertiesProvider'\s*/>})
     end
 
   end
@@ -280,7 +280,7 @@ type='DataSource' properties-provider='org.cloudfoundry.reconfiguration.tomee.De
       component.compile
 
       expect(resources_xml.read).to match(%r{<Resource id='jdbc/test-service-oracle-schema' \
-type='DataSource' properties-provider='org.cloudfoundry.reconfiguration.tomee.DelegatingPropertiesProvider'/>})
+type='DataSource' properties-provider='org.cloudfoundry.reconfiguration.tomee.DelegatingPropertiesProvider'\s*/>})
     end
 
   end
@@ -306,9 +306,63 @@ type='DataSource' properties-provider='org.cloudfoundry.reconfiguration.tomee.De
       component.compile
 
       expect(resources_xml.read).to match(%r{<Resource id='jdbc/test-service-db2-schema' \
-type='DataSource' properties-provider='org.cloudfoundry.reconfiguration.tomee.DelegatingPropertiesProvider'/>})
+type='DataSource' properties-provider='org.cloudfoundry.reconfiguration.tomee.DelegatingPropertiesProvider'\s*/>})
     end
 
+  end
+
+  context do
+    let(:vcap_services) do
+      {
+        'simple-dont-want-a-resource' => [{ 'name'        => 'my_service',
+                                            'tags'        => [],
+                                            'credentials' => {
+                                              'includeInResources': 'false'
+                                            } }]
+      }
+    end
+
+    it 'creates a simple resource file with no nodes',
+       cache_fixture: 'stub-resource-configuration.jar',
+       app_fixture:   'container_ear_structure_empty_resource' do
+      meta_inf      = app_dir + 'META-INF'
+      resources_xml = meta_inf + 'resources.xml'
+      expect(resources_xml).to exist
+
+      component.compile
+
+      expect(resources_xml.read).to match(%r{<resources\s*>\s*</resources\s*>})
+    end
+
+  end
+
+  context do
+    let(:vcap_services) do
+      {
+        'want-a-resource-with-attrs-and-props' => [{ 'name'        => 'my_service',
+                                                     'tags'        => [],
+                                                     'credentials' => {
+                                                       'includeInResources': 'true',
+                                                       'id': 'myId',
+                                                       'class-name': 'my.org.package.class',
+                                                       'name1': 'val1',
+                                                       'name2': 'val2'
+                                                     } }]
+      }
+    end
+
+    it 'creates a resource file with one node and attrs and props populated',
+       cache_fixture: 'stub-resource-configuration.jar',
+       app_fixture:   'container_ear_structure_empty_resource' do
+      meta_inf      = app_dir + 'META-INF'
+      resources_xml = meta_inf + 'resources.xml'
+      expect(resources_xml).to exist
+
+      component.compile
+
+      expect(resources_xml.read).to match(%r{<Resource id='myId' \
+class-name='my.org.package.class'\s*>name1 = val1\s*name2 = val2\s*</Resource\s*>})
+    end
   end
 
   context do
@@ -332,7 +386,7 @@ type='DataSource' properties-provider='org.cloudfoundry.reconfiguration.tomee.De
       component.compile
 
       expect(resources_xml.read).to match(%r{<Resource id='jdbc/test-service-sqlserver-schema' \
-type='DataSource' properties-provider='org.cloudfoundry.reconfiguration.tomee.DelegatingPropertiesProvider'/>})
+type='DataSource' properties-provider='org.cloudfoundry.reconfiguration.tomee.DelegatingPropertiesProvider'\s*/>})
     end
 
   end

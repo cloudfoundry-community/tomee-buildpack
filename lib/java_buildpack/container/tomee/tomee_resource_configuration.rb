@@ -55,6 +55,8 @@ module JavaBuildpack
         "tomee_resource_configuration-#{@version}.jar"
       end
 
+      CRED_PARAM_FLAG = 'includeInResources'.freeze
+
       def mutate_resources_xml
         with_timing "Modifying #{resources_xml} for Resource Configuration" do
           document = read_xml resources_xml
@@ -64,6 +66,7 @@ module JavaBuildpack
           resources  = document.add_element 'resources' if resources.nil?
 
           relational_services_as_resources resources
+          services_as_resources resources
 
           write_xml resources_xml, document
           @logger.debug { "  Modified resources.xml: #{document}" }
@@ -92,6 +95,39 @@ module JavaBuildpack
         end
         resource.add_attribute 'properties-provider',
                                'org.cloudfoundry.reconfiguration.tomee.DelegatingPropertiesProvider'
+      end
+
+      def services_as_resources(resources)
+        @application.services.each do |service|
+          next unless (service.include? 'credentials') &&
+            (service['credentials'].include? CRED_PARAM_FLAG) &&
+            (service['credentials'][CRED_PARAM_FLAG] == 'true')
+          add_resource service, resources
+        end
+      end
+
+      def add_resource(service, resources)
+        attribute_array = ['id', 'type', 'class-name', 'provider', 'factory-name',
+                           'classpath', 'aliases',
+                           'post-construct', 'pre-destroy', 'Lazy']
+
+        creds_hash = Hash[service['credentials'].map { |key, value| [key, value] } ]
+
+        # split the hash into two pieces:  one where they should be included as attributes
+        # and one where they should be included as properties
+        creds_as_attributes = creds_hash.select { |x| attribute_array.include? x }
+        #creds_as_properties = creds_hash.reject { |x| attribute_array.include? x }
+
+        # remove the flag param as a property
+        #creds_as_properties = creds_as_properties.reject { |x| (x == CRED_PARAM_FLAG) }
+
+        resource = resources.add_element 'Resource', creds_as_attributes
+        resource.add_attribute 'properties-provider',
+                               'org.cloudfoundry.reconfiguration.tomee.GenericServicePropertiesProvider'
+
+        #creds_as_properties.each do |key, value|
+        #  resource.add_text REXML::Text.new((key + ' = ' + value + "\n"), true)
+        #end
       end
 
       def resources_xml

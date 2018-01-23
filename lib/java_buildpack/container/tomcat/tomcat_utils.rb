@@ -17,6 +17,7 @@
 
 require 'java_buildpack'
 require 'rexml/document'
+require 'rexml/formatters/transitive'
 require 'rexml/formatters/pretty'
 
 module JavaBuildpack
@@ -82,7 +83,7 @@ module JavaBuildpack
     private
 
     def formatter
-      formatter         = REXML::Formatters::Pretty.new(4)
+      formatter = REXML::Formatters::Pretty.new(4)
       formatter.compact = true
       formatter
     end
