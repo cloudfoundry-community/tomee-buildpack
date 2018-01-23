@@ -68,7 +68,7 @@ module JavaBuildpack
           relational_services_as_resources resources
           services_as_resources resources
 
-          write_xml_transitive resources_xml, document
+          write_xml resources_xml, document
           @logger.debug { "  Modified resources.xml: #{document}" }
         end
       end
