@@ -27,9 +27,15 @@ describe JavaBuildpack::Jre::OpenJDKLikeMemoryCalculator do
 
   let(:configuration) { { 'stack_threads' => '200' } }
 
-  let(:java_home) { JavaBuildpack::Component::MutableJavaHome.new }
+  let(:java_home) do
+    java_home = JavaBuildpack::Component::MutableJavaHome.new
+    java_home.version = version_8
+    return java_home
+  end
 
-  let(:version_8) { VERSION_8 = JavaBuildpack::Util::TokenizedVersion.new('1.8.0_+') }
+  let(:version_8) { JavaBuildpack::Util::TokenizedVersion.new('1.8.0_162') }
+
+  let(:version_9) { JavaBuildpack::Util::TokenizedVersion.new('9.0.4_11') }
 
   it 'copies executable to bin directory',
      cache_fixture: 'stub-memory-calculator.tar.gz' do
@@ -97,6 +103,29 @@ describe JavaBuildpack::Jre::OpenJDKLikeMemoryCalculator do
     expect_any_instance_of(described_class).not_to receive(:`).with(start_with("unzip -l #{app_dir + 'directory.jar'}"))
 
     component.compile
+  end
+
+  it 'adds MALLOC_ARENA_MAX to environment' do
+    component.release
+
+    expect(environment_variables).to include('MALLOC_ARENA_MAX=2')
+  end
+
+  context 'when java 9' do
+
+    it 'creates memory calculation command',
+       app_fixture: 'jre_memory_calculator_application' do
+
+      java_home.version = version_9
+
+      command = component.memory_calculation_command
+
+      expect(command).to eq('CALCULATED_MEMORY=$($PWD/.java-buildpack/open_jdk_like_memory_calculator/bin/' \
+                            'java-buildpack-memory-calculator-0.0.0 -totMemory=$MEMORY_LIMIT -stackThreads=200 ' \
+                            '-loadedClasses=14777 -poolType=metaspace -vmOptions="$JAVA_OPTS") && echo JVM Memory ' \
+                            'Configuration: $CALCULATED_MEMORY && JAVA_OPTS="$JAVA_OPTS $CALCULATED_MEMORY"')
+    end
+
   end
 
 end

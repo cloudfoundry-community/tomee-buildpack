@@ -1,5 +1,7 @@
+# frozen_string_literal: true
+
 # Cloud Foundry Java Buildpack
-# Copyright 2013-2018 the original author or authors.
+# Copyright 2018 the original author or authors.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -13,9 +15,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# Container security provider configuration
----
-version: 1.+
-repository_root: "{default.repository.root}/container-security-provider"
-key_manager_enabled: 
-trust_manager_enabled: 
+require 'fileutils'
+require 'java_buildpack/jre'
+require 'java_buildpack/jre/open_jdk_like'
+
+module JavaBuildpack
+  module Jre
+
+    # Encapsulates the detect, compile, and release functionality for selecting an SapMachine JRE.
+    class SapMachineJRE < OpenJDKLike
+    end
+
+  end
+end
