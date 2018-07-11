@@ -17,7 +17,6 @@
 
 require 'java_buildpack'
 require 'rexml/document'
-require 'rexml/formatters/transitive'
 require 'rexml/formatters/pretty'
 
 module JavaBuildpack
