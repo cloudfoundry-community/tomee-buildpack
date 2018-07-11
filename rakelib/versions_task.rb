@@ -15,7 +15,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-$LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
+$LOAD_PATH.unshift File.expand_path('../lib', __dir__)
 
 require 'java_buildpack/logging/logger_factory'
 require 'java_buildpack/repository/version_resolver'
@@ -81,6 +81,7 @@ module Package
       'protect_app_security_provider'       => 'Gemalto ProtectApp Security Provider',
       'redis_store'                         => 'Redis Session Store',
       'resource_configuration'              => 'TomEE Resource Configuration',
+      'riverbed_appinternals_agent'         => 'Riverbed Appinternals Agent',
       'sky_walking_agent'                   => 'SkyWalking',
       'spring_auto_reconfiguration'         => 'Spring Auto-reconfiguration',
       'spring_boot_cli'                     => 'Spring Boot CLI',
