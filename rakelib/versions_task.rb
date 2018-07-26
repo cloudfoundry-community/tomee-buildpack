@@ -205,7 +205,7 @@ module Package
       end
 
       dependency_versions
-        .uniq { |dependency| dependency['id']}
+        .uniq { |dependency| dependency['id'] }
         .sort_by { |dependency| dependency['id'] }
     end
 
