@@ -55,25 +55,25 @@ describe JavaBuildpack::Container::Tomee do
   it 'detects WEB-INF',
      app_fixture: 'container_tomcat' do
 
-    expect(component.supports?).to be
+    expect(component).to be_supports
   end
 
   it 'does not detect when WEB-INF is absent',
      app_fixture: 'container_main' do
 
-    expect(component.supports?).not_to be
+    expect(component).not_to be_supports
   end
 
   it 'does not detect when WEB-INF is present in a Java main application',
      app_fixture: 'container_main_with_web_inf' do
 
-    expect(component.supports?).not_to be
+    expect(component).not_to be_supports
   end
 
   it 'detects META-INF/application.xml',
      app_fixture: 'container_ear_structure' do
 
-    expect(component.supports?).to be
+    expect(component).to be_supports
   end
 
   it 'creates submodules' do

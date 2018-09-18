@@ -36,6 +36,7 @@ module JavaBuildpack
       def compile
         download_jar(jar_name, tomcat_lib)
         return unless @configuration['enabled']
+
         mutate_resources_xml
       end
 
@@ -102,6 +103,7 @@ module JavaBuildpack
           next unless (service.include? 'credentials') &&
             (service['credentials'].include? CRED_PARAM_FLAG) &&
             (service['credentials'][CRED_PARAM_FLAG] == 'true')
+
           add_resource service, resources
         end
       end
@@ -111,7 +113,7 @@ module JavaBuildpack
                            'classpath', 'aliases',
                            'post-construct', 'pre-destroy', 'Lazy']
 
-        creds_hash = Hash[service['credentials'].map { |key, value| [key, value] } ]
+        creds_hash = Hash[service['credentials'].map { |key, value| [key, value] }]
 
         # filter the hash into only those params that belong as attributes
         creds_as_attributes = creds_hash.select { |x| attribute_array.include? x }
