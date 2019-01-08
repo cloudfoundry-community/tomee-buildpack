@@ -32,11 +32,11 @@ describe JavaBuildpack::Container::Tomee do
   let(:component) { StubTomee.new context }
 
   let(:configuration) do
-    { 'tomee'                  => tomee_configuration,
-      'lifecycle_support'      => lifecycle_support_configuration,
-      'logging_support'        => logging_support_configuration,
+    { 'tomee' => tomee_configuration,
+      'lifecycle_support' => lifecycle_support_configuration,
+      'logging_support' => logging_support_configuration,
       'access_logging_support' => access_logging_support_configuration,
-      'redis_store'            => redis_store_configuration,
+      'redis_store' => redis_store_configuration,
       'external_configuration' => tomcat_external_configuration }
   end
 

@@ -48,11 +48,11 @@ module Package
 
     private
 
-    ARCHITECTURE_PATTERN = /\{architecture\}/
+    ARCHITECTURE_PATTERN = /\{architecture\}/.freeze
 
-    DEFAULT_REPOSITORY_ROOT_PATTERN = /\{default.repository.root\}/
+    DEFAULT_REPOSITORY_ROOT_PATTERN = /\{default.repository.root\}/.freeze
 
-    PLATFORM_PATTERN = /\{platform\}/
+    PLATFORM_PATTERN = /\{platform\}/.freeze
 
     private_constant :ARCHITECTURE_PATTERN, :DEFAULT_REPOSITORY_ROOT_PATTERN, :PLATFORM_PATTERN
 

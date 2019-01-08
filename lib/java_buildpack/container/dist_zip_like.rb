@@ -76,9 +76,9 @@ module JavaBuildpack
 
       private
 
-      PATTERN_APP_CLASSPATH = /^declare -r app_classpath=\"(.*)\"$/
+      PATTERN_APP_CLASSPATH = /^declare -r app_classpath=\"(.*)\"$/.freeze
 
-      PATTERN_CLASSPATH = /^CLASSPATH=(.*)$/
+      PATTERN_CLASSPATH = /^CLASSPATH=(.*)$/.freeze
 
       private_constant :PATTERN_APP_CLASSPATH, :PATTERN_CLASSPATH
 

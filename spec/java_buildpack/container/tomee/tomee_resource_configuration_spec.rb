@@ -187,16 +187,16 @@ properties-provider='org.cloudfoundry.reconfiguration.tomee.DelegatingProperties
   context do
     let(:vcap_services) do
       {
-        'test-service-relational-tag' => [{ 'name'        => 'test-service-relational-tag', 'label' => 'label-1',
-                                            'tags'        => %w[tag1 relational], 'plan' => 'test-plan',
+        'test-service-relational-tag' => [{ 'name' => 'test-service-relational-tag', 'label' => 'label-1',
+                                            'tags' => %w[tag1 relational], 'plan' => 'test-plan',
                                             'credentials' => { 'uri' => 'test-uri' } }]
       }
     end
 
     it 'adds resource element for services tagged with relational',
        cache_fixture: 'stub-resource-configuration.jar',
-       app_fixture:   'container_ear_structure_empty_resource' do
-      meta_inf      = app_dir + 'META-INF'
+       app_fixture: 'container_ear_structure_empty_resource' do
+      meta_inf = app_dir + 'META-INF'
       resources_xml = meta_inf + 'resources.xml'
       expect(resources_xml).to exist
 
@@ -210,8 +210,8 @@ properties-provider='org.cloudfoundry.reconfiguration.tomee.DelegatingProperties
   context do
     let(:vcap_services) do
       {
-        'test-service-mysql-schema' => [{ 'name'        => 'test-service-mysql-schema',
-                                          'tags'        => [],
+        'test-service-mysql-schema' => [{ 'name' => 'test-service-mysql-schema',
+                                          'tags' => [],
                                           'credentials' => {
                                             'jdbcUrl': 'jdbc:mysql://auser:apass@hostname.com:3306/mydb'
                                           } }]
@@ -220,8 +220,8 @@ properties-provider='org.cloudfoundry.reconfiguration.tomee.DelegatingProperties
 
     it 'adds resource element for services with jdbcUrl starting with jdbc:mysql',
        cache_fixture: 'stub-resource-configuration.jar',
-       app_fixture:   'container_ear_structure_empty_resource' do
-      meta_inf      = app_dir + 'META-INF'
+       app_fixture: 'container_ear_structure_empty_resource' do
+      meta_inf = app_dir + 'META-INF'
       resources_xml = meta_inf + 'resources.xml'
       expect(resources_xml).to exist
 
@@ -236,8 +236,8 @@ properties-provider='org.cloudfoundry.reconfiguration.tomee.DelegatingProperties
   context do
     let(:vcap_services) do
       {
-        'test-service-postgresql-schema' => [{ 'name'        => 'test-service-postgresql-schema',
-                                               'tags'        => [],
+        'test-service-postgresql-schema' => [{ 'name' => 'test-service-postgresql-schema',
+                                               'tags' => [],
                                                'credentials' => {
                                                  'jdbcUrl': 'jdbc:postgresql://auser:apass@hostname.com:1521/mydb'
                                                } }]
@@ -246,8 +246,8 @@ properties-provider='org.cloudfoundry.reconfiguration.tomee.DelegatingProperties
 
     it 'adds resource element for services with jdbcUrl starting with jdbc:postgresql',
        cache_fixture: 'stub-resource-configuration.jar',
-       app_fixture:   'container_ear_structure_empty_resource' do
-      meta_inf      = app_dir + 'META-INF'
+       app_fixture: 'container_ear_structure_empty_resource' do
+      meta_inf = app_dir + 'META-INF'
       resources_xml = meta_inf + 'resources.xml'
       expect(resources_xml).to exist
 
@@ -262,8 +262,8 @@ type='DataSource' properties-provider='org.cloudfoundry.reconfiguration.tomee.De
   context do
     let(:vcap_services) do
       {
-        'test-service-oracle-schema' => [{ 'name'        => 'test-service-oracle-schema',
-                                           'tags'        => [],
+        'test-service-oracle-schema' => [{ 'name' => 'test-service-oracle-schema',
+                                           'tags' => [],
                                            'credentials' => {
                                              'jdbcUrl': 'jdbc:oracle://auser:apass@hostname.com:432/mydb'
                                            } }]
@@ -272,8 +272,8 @@ type='DataSource' properties-provider='org.cloudfoundry.reconfiguration.tomee.De
 
     it 'adds resource element for services with jdbcUrl starting with jdbc:oracle',
        cache_fixture: 'stub-resource-configuration.jar',
-       app_fixture:   'container_ear_structure_empty_resource' do
-      meta_inf      = app_dir + 'META-INF'
+       app_fixture: 'container_ear_structure_empty_resource' do
+      meta_inf = app_dir + 'META-INF'
       resources_xml = meta_inf + 'resources.xml'
       expect(resources_xml).to exist
 
@@ -288,8 +288,8 @@ type='DataSource' properties-provider='org.cloudfoundry.reconfiguration.tomee.De
   context do
     let(:vcap_services) do
       {
-        'test-service-db2-schema' => [{ 'name'        => 'test-service-db2-schema',
-                                        'tags'        => [],
+        'test-service-db2-schema' => [{ 'name' => 'test-service-db2-schema',
+                                        'tags' => [],
                                         'credentials' => {
                                           'jdbcUrl': 'jdbc:db2://auser:apass@hostname.com:543/mydb'
                                         } }]
@@ -298,8 +298,8 @@ type='DataSource' properties-provider='org.cloudfoundry.reconfiguration.tomee.De
 
     it 'adds resource element for services with jdbcUrl starting with jdbc:db2',
        cache_fixture: 'stub-resource-configuration.jar',
-       app_fixture:   'container_ear_structure_empty_resource' do
-      meta_inf      = app_dir + 'META-INF'
+       app_fixture: 'container_ear_structure_empty_resource' do
+      meta_inf = app_dir + 'META-INF'
       resources_xml = meta_inf + 'resources.xml'
       expect(resources_xml).to exist
 
@@ -314,8 +314,8 @@ type='DataSource' properties-provider='org.cloudfoundry.reconfiguration.tomee.De
   context do
     let(:vcap_services) do
       {
-        'simple-dont-want-a-resource' => [{ 'name'        => 'my_service',
-                                            'tags'        => [],
+        'simple-dont-want-a-resource' => [{ 'name' => 'my_service',
+                                            'tags' => [],
                                             'credentials' => {
                                               'includeInResources': 'false'
                                             } }]
@@ -324,8 +324,8 @@ type='DataSource' properties-provider='org.cloudfoundry.reconfiguration.tomee.De
 
     it 'creates a simple resource file with no nodes',
        cache_fixture: 'stub-resource-configuration.jar',
-       app_fixture:   'container_ear_structure_empty_resource' do
-      meta_inf      = app_dir + 'META-INF'
+       app_fixture: 'container_ear_structure_empty_resource' do
+      meta_inf = app_dir + 'META-INF'
       resources_xml = meta_inf + 'resources.xml'
       expect(resources_xml).to exist
 
@@ -339,8 +339,8 @@ type='DataSource' properties-provider='org.cloudfoundry.reconfiguration.tomee.De
   context do
     let(:vcap_services) do
       {
-        'want-a-resource-with-attrs-and-props' => [{ 'name'        => 'my_service',
-                                                     'tags'        => [],
+        'want-a-resource-with-attrs-and-props' => [{ 'name' => 'my_service',
+                                                     'tags' => [],
                                                      'credentials' => {
                                                        'includeInResources': 'true',
                                                        'id': 'myId',
@@ -353,8 +353,8 @@ type='DataSource' properties-provider='org.cloudfoundry.reconfiguration.tomee.De
 
     it 'creates a resource file with one node and attrs and props populated',
        cache_fixture: 'stub-resource-configuration.jar',
-       app_fixture:   'container_ear_structure_empty_resource' do
-      meta_inf      = app_dir + 'META-INF'
+       app_fixture: 'container_ear_structure_empty_resource' do
+      meta_inf = app_dir + 'META-INF'
       resources_xml = meta_inf + 'resources.xml'
       expect(resources_xml).to exist
 
@@ -369,8 +369,8 @@ properties-provider='org.cloudfoundry.reconfiguration.tomee.GenericServiceProper
   context do
     let(:vcap_services) do
       {
-        'test-service-sqlserver-schema' => [{ 'name'        => 'test-service-sqlserver-schema',
-                                              'tags'        => [],
+        'test-service-sqlserver-schema' => [{ 'name' => 'test-service-sqlserver-schema',
+                                              'tags' => [],
                                               'credentials' => {
                                                 'jdbcUrl': 'jdbc:sqlserver://auser:apass@hostname.com:4407/mydb'
                                               } }]
@@ -379,8 +379,8 @@ properties-provider='org.cloudfoundry.reconfiguration.tomee.GenericServiceProper
 
     it 'adds resource element for services with jdbcUrl starting with jdbc:sqlserver',
        cache_fixture: 'stub-resource-configuration.jar',
-       app_fixture:   'container_ear_structure_empty_resource' do
-      meta_inf      = app_dir + 'META-INF'
+       app_fixture: 'container_ear_structure_empty_resource' do
+      meta_inf = app_dir + 'META-INF'
       resources_xml = meta_inf + 'resources.xml'
       expect(resources_xml).to exist
 

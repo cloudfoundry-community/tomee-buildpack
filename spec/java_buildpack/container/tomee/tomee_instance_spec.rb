@@ -29,7 +29,7 @@ describe JavaBuildpack::Container::TomeeInstance do
   end
 
   it 'configures for TomEE 1.7.*',
-     app_fixture:   'container_tomcat',
+     app_fixture: 'container_tomcat',
      cache_fixture: 'stub-tomcat.tar.gz' do
 
     component.compile
@@ -42,7 +42,7 @@ describe JavaBuildpack::Container::TomeeInstance do
     let(:version) { '7.0.1' }
 
     it 'configures for TomEE 7.0.x',
-       app_fixture:   'container_tomcat',
+       app_fixture: 'container_tomcat',
        cache_fixture: 'stub-tomcat.tar.gz' do
 
       component.compile
@@ -53,7 +53,7 @@ describe JavaBuildpack::Container::TomeeInstance do
   end
 
   it 'extracts TomEE from a GZipped TAR',
-     app_fixture:   'container_tomcat',
+     app_fixture: 'container_tomcat',
      cache_fixture: 'stub-tomcat.tar.gz' do
 
     component.compile
@@ -64,7 +64,7 @@ describe JavaBuildpack::Container::TomeeInstance do
   end
 
   it 'links only the application files and directories to the ROOT webapp',
-     app_fixture:   'container_tomcat_with_index',
+     app_fixture: 'container_tomcat_with_index',
      cache_fixture: 'stub-tomcat.tar.gz' do
 
     FileUtils.touch(app_dir + '.test-file')
@@ -90,7 +90,7 @@ describe JavaBuildpack::Container::TomeeInstance do
     let(:configuration) { { 'context_path' => '/first-segment/second-segment' } }
 
     it 'links only the application files and directories to the first-segment#second-segment webapp',
-       app_fixture:   'container_tomcat_with_index',
+       app_fixture: 'container_tomcat_with_index',
        cache_fixture: 'stub-tomcat.tar.gz' do
 
       FileUtils.touch(app_dir + '.test-file')
@@ -114,20 +114,20 @@ describe JavaBuildpack::Container::TomeeInstance do
   end
 
   it 'links the Tomcat datasource JAR to the ROOT webapp when that JAR is present',
-     app_fixture:   'container_tomcat',
+     app_fixture: 'container_tomcat',
      cache_fixture: 'stub-tomcat7.tar.gz' do
 
     component.compile
 
     web_inf_lib = app_dir + 'WEB-INF/lib'
-    app_jar     = web_inf_lib + 'tomcat-jdbc.jar'
+    app_jar = web_inf_lib + 'tomcat-jdbc.jar'
     expect(app_jar).to exist
     expect(app_jar).to be_symlink
     expect(app_jar.readlink).to eq((sandbox + 'lib/tomcat-jdbc.jar').relative_path_from(web_inf_lib))
   end
 
   it 'does not link the Tomcat datasource JAR to the ROOT webapp when that JAR is absent',
-     app_fixture:   'container_tomcat',
+     app_fixture: 'container_tomcat',
      cache_fixture: 'stub-tomcat.tar.gz' do
 
     component.compile
@@ -137,7 +137,7 @@ describe JavaBuildpack::Container::TomeeInstance do
   end
 
   it 'links additional libraries to the ROOT webapp',
-     app_fixture:   'container_tomcat',
+     app_fixture: 'container_tomcat',
      cache_fixture: 'stub-tomcat.tar.gz' do
 
     component.compile
@@ -156,7 +156,7 @@ describe JavaBuildpack::Container::TomeeInstance do
   end
 
   it 'links additional libraries to tomee/lib for an ear file',
-     app_fixture:   'container_ear_structure',
+     app_fixture: 'container_ear_structure',
      cache_fixture: 'stub-tomcat.tar.gz' do
 
     component.compile
@@ -175,7 +175,7 @@ describe JavaBuildpack::Container::TomeeInstance do
   end
 
   it 'links driver libraries to tomee/lib for an ear file',
-     app_fixture:   'container_ear_structure_with_resource_drivers',
+     app_fixture: 'container_ear_structure_with_resource_drivers',
      cache_fixture: 'stub-tomcat.tar.gz' do
 
     component.compile
