@@ -25,6 +25,7 @@ require 'java_buildpack/container/tomcat/tomcat_lifecycle_support'
 require 'java_buildpack/container/tomcat/tomcat_logging_support'
 require 'java_buildpack/container/tomcat/tomcat_access_logging_support'
 require 'java_buildpack/container/tomcat/tomcat_redis_store'
+require 'java_buildpack/container/tomcat/tomcat_setenv'
 require 'java_buildpack/util/java_main_utils'
 
 module JavaBuildpack
@@ -55,10 +56,11 @@ module JavaBuildpack
           TomeeInstance.new(sub_configuration_context(context, 'tomee')),
           TomeeResourceConfiguration.new(sub_configuration_context(context, 'resource_configuration')),
           TomcatLifecycleSupport.new(sub_configuration_context(context, 'lifecycle_support')),
+          TomcatInsightSupport.new(context),
           TomcatLoggingSupport.new(sub_configuration_context(context, 'logging_support')),
           TomcatAccessLoggingSupport.new(sub_configuration_context(context, 'access_logging_support')),
           TomcatRedisStore.new(sub_configuration_context(context, 'redis_store')),
-          TomcatInsightSupport.new(context)
+          TomcatSetenv.new(context)
         ]
 
         tomee_configuration = @configuration['tomee']
