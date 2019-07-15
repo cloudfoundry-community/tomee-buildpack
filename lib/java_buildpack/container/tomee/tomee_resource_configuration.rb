@@ -109,9 +109,7 @@ module JavaBuildpack
       end
 
       def add_resource(service, resources)
-        attribute_array = ['id', 'type', 'class-name', 'provider', 'factory-name',
-                           'classpath', 'aliases',
-                           'post-construct', 'pre-destroy', 'Lazy']
+        attribute_array = %w[id type class-name provider factory-name classpath aliases post-construct pre-destroy Lazy]
 
         creds_hash = Hash[service['credentials'].map { |key, value| [key, value] }]
 
