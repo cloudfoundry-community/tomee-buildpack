@@ -1,6 +1,6 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="All Tests (2.7)" type="RSpecRunConfigurationType" factoryName="RSpec" singleton="true">
-    <module name="java-buildpack" />
+    <module name="tomee-buildpack" />
     <predefined_log_file enabled="true" id="RUBY_RSPEC" />
     <RSPEC_RUN_CONFIG_SETTINGS_ID NAME="RUBY_ARGS" VALUE="" />
     <RSPEC_RUN_CONFIG_SETTINGS_ID NAME="WORK DIR" VALUE="$PROJECT_DIR$" />
